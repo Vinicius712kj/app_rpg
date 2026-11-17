@@ -196,7 +196,7 @@
 
         <div class="form-group" id="ec_etapa_codigo">
           <label style="display:block; font-size:11px; letter-spacing:1px; color:var(--gold); margin-bottom:4px;">CÓDIGO DE CONVITE</label>
-          <input type="text" id="ec_codigo" class="form-input" placeholder="Ex: X7K2QP" style="text-transform:uppercase; letter-spacing:2px;" maxlength="6">
+          <input type="text" id="ec_codigo" class="form-input" placeholder="Ex: A7B2C9D4E8" style="text-transform:uppercase; letter-spacing:2px;" maxlength="10">
           <div id="ec_codigo_erro" style="color:#c47a7a; font-size:12px; margin-top:6px; display:none;"></div>
         </div>
 
@@ -376,10 +376,10 @@ function mapearCampanhaSupabase(c) {
     jogadores: extra.jogadores ?? 4,
     sessoes: extra.sessoes ?? 0,
     desc: extra.desc || 'Uma nova campanha aguarda...',
-    banner: extra.banner || null,
+    banner: typeof extra.banner === 'string' && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(extra.banner)
+      ? extra.banner : null,
     criadaEm: new Date(c.criado_em).getTime(),
     ultimaSessao: extra.ultimaSessao || null,
-    codigoConvite: c.codigo_convite,
     mestreId: c.mestre_id,
     entradaAberta: c.entrada_aberta !== false
   };
@@ -476,14 +476,14 @@ function renderCampanhas() {
         <span class="camp-status ${st.cls}" style="position:relative;z-index:1">${st.label}</span>
       </div>
       <div class="camp-card-body">
-        <div class="camp-nome">${c.nome}</div>
-        <div class="camp-desc">${c.desc}</div>
+        <div class="camp-nome">${esc(c.nome)}</div>
+        <div class="camp-desc">${esc(c.desc)}</div>
         <div class="camp-meta">
           ${sistemaBadge(c.sistema)}
-          <span class="meta-chip">👥 ${c.jogadores} jogadores</span>
-          <span class="meta-chip">📖 ${c.sessoes} sessões</span>
+          <span class="meta-chip">👥 ${esc(c.jogadores)} jogadores</span>
+          <span class="meta-chip">📖 ${esc(c.sessoes)} sessões</span>
         </div>
-        ${chars.length ? `<div class="camp-chars-mini">${chars.slice(0,4).map(p=>`<div class="char-mini-dot" title="${p.nome}">${p.nome[0]}</div>`).join('')}${chars.length > 4 ? `<div class="char-mini-dot more">+${chars.length-4}</div>` : ''}</div>` : ''}
+        ${chars.length ? `<div class="camp-chars-mini">${chars.slice(0,4).map(p=>`<div class="char-mini-dot" title="${esc(p.nome)}">${esc(p.nome[0])}</div>`).join('')}${chars.length > 4 ? `<div class="char-mini-dot more">+${chars.length-4}</div>` : ''}</div>` : ''}
       </div>
     </div>`;
   }).join('') + `
@@ -844,13 +844,6 @@ function confirmCrop() {
   closeCropper();
 }
 
-function gerarCodigoConvite() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let codigo = '';
-  for (let i = 0; i < 6; i++) codigo += chars[Math.floor(Math.random() * chars.length)];
-  return codigo;
-}
-
 async function criarCampanha() {
   const nome      = document.getElementById('nc_name').value.trim();
   const sistema   = document.getElementById('nc_system').value;
@@ -881,7 +874,6 @@ async function criarCampanha() {
 
 async function _executarCriacaoCampanha(dadosForm) {
   const { nome, sistema, jogadores, desc, banner, entradaAberta } = dadosForm;
-  const codigoConvite = gerarCodigoConvite();
 
   const usuario = usuarioLogado();
   if (!usuario || !usuario.id) {
@@ -897,7 +889,6 @@ async function _executarCriacaoCampanha(dadosForm) {
       nome,
       sistema,
       mestre_id: usuario.id,
-      codigo_convite: codigoConvite,
       entrada_aberta: entradaAberta !== false,
       dados: { jogadores, sessoes: 0, desc: desc || 'Uma nova campanha aguarda...', banner: banner || null, ultimaSessao: null }
     })
@@ -924,7 +915,14 @@ async function _executarCriacaoCampanha(dadosForm) {
   if (bp) { bp.src=''; bp.style.display='none'; }
   if (bph) bph.style.display='flex';
   document.getElementById('nc_banner_area')?.classList.remove('has-image');
-  showToast(`⚔ Campanha "${nome}" criada! Código de convite: ${codigoConvite}`, 'gold');
+  const { data: convite, error: erroConvite } = await window.supabaseClient
+    .from('convites_campanha')
+    .select('codigo')
+    .eq('campanha_id', data.id)
+    .single();
+  if (erroConvite) console.error('[forja] erro ao buscar convite:', erroConvite.message);
+  const mensagem = convite ? ` Código de convite: ${convite.codigo}` : '';
+  showToast(`⚔ Campanha "${nome}" criada!${mensagem}`, 'gold');
 }
 
 let _ecCampanhaEncontrada = null;
@@ -1084,12 +1082,12 @@ async function confirmarEntrarCampanha() {
     closeModal('modalEntrarCampanha');
 
     if (_ecCampanhaEncontrada.entrada_aberta) {
-      showToast(`⚔ Você entrou em "${esc(_ecCampanhaEncontrada.nome)}"!`, 'gold');
+      showToast(`⚔ Você entrou em "${_ecCampanhaEncontrada.nome}"!`, 'gold');
       await carregarDadosDoSupabase();
       renderCampanhas();
       renderPersonagens();
     } else {
-      showToast(`✦ Pedido enviado! Aguarde a aprovação do mestre de "${esc(_ecCampanhaEncontrada.nome)}".`, 'gold');
+      showToast(`✦ Pedido enviado! Aguarde a aprovação do mestre de "${_ecCampanhaEncontrada.nome}".`, 'gold');
     }
   } finally {
     btnEntrar.disabled = false;
@@ -1123,7 +1121,7 @@ function renderPersonagens() {
       <div class="char-nome">${p.nome}</div>
       <div class="char-sub">${subtituloChar(p, s)}</div>
       ${sistemaBadge(p.sistema)}
-      ${campanhasDoChar.length ? `<div class="char-camps-line">⚔ ${campanhasDoChar.map(c=>c.nome).join(', ')}</div>` : ''}
+      ${campanhasDoChar.length ? `<div class="char-camps-line">⚔ ${campanhasDoChar.map(c=>esc(c.nome)).join(', ')}</div>` : ''}
     </div>`;
   }).join('') + `
     <div class="new-card fade-in" onclick="openModal('modalPersonagem')">
@@ -1373,7 +1371,7 @@ function showToast(msg, type = '') {
   const c = document.getElementById('toastContainer');
   const t = document.createElement('div');
   t.className = 'toast';
-  t.innerHTML = msg;
+  t.textContent = msg;
   if (type === 'gold')    t.style.borderColor = 'var(--gold)';
   if (type === 'warning') t.style.borderColor = 'var(--blood-light)';
   c.appendChild(t);

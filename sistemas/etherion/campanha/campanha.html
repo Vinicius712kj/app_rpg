@@ -971,11 +971,12 @@
     const statusLabel = { active: 'Em andamento', paused: 'Pausada', done: 'Encerrada' }[campanha.status] || campanha.status;
     statusEl.textContent = statusLabel;
 
-    if (ehMestre && campanha.codigo_convite) {
+    const codigoConvite = ehMestre ? await carregarCodigoConvite(campanha.id) : null;
+    if (codigoConvite) {
       document.getElementById('codigoConviteWrap').style.display = 'block';
-      document.getElementById('codigoConviteValor').textContent = campanha.codigo_convite;
+      document.getElementById('codigoConviteValor').textContent = codigoConvite;
       document.getElementById('btnCopiarCodigo').addEventListener('click', () => {
-        navigator.clipboard.writeText(campanha.codigo_convite).then(() => {
+        navigator.clipboard.writeText(codigoConvite).then(() => {
           showToast('Código copiado!');
         }).catch(() => {
           showToast('Não foi possível copiar automaticamente — copie manualmente.');
@@ -1025,10 +1026,17 @@
     personagens = data || [];
   }
 
-  // Lista pública de jogadores (aba Início) via function SECURITY DEFINER
-  // — contorna o RLS restritivo de `personagens` para jogadores comuns
-  // sem enfraquecer a policy real da tabela. Ver migração
-  // 011_listar_jogadores_campanha.sql.
+  async function carregarCodigoConvite(campanhaId) {
+    const { data, error } = await sb
+      .from('convites_campanha')
+      .select('codigo')
+      .eq('campanha_id', campanhaId)
+      .maybeSingle();
+    if (error) console.error('[campanha-etherion] erro ao buscar convite:', error.message);
+    return data?.codigo;
+  }
+
+  // A lista do grupo usa a RPC para mostrar os nomes sem abrir as fichas privadas.
   async function carregarJogadoresPublicos(campanhaId) {
     const { data, error } = await sb
       .rpc('listar_jogadores_campanha', { p_campanha_id: campanhaId });
@@ -1037,8 +1045,7 @@
       console.error('[campanha-etherion] erro ao carregar jogadores da campanha:', error.message);
       // Fallback: melhor mostrar ao menos o que a query direta trouxe
       // (o próprio personagem, no caso de um jogador comum) do que uma
-      // lista vazia — cobre o caso da function ainda não ter sido
-      // criada no banco (migração 011 não rodada ainda).
+      // lista vazia quando a consulta falhar.
       jogadoresPublicos = personagens.map(p => ({ personagem_id: p.id, personagem_nome: p.nome, dono_id: p.dono_id }));
       return;
     }
@@ -1098,7 +1105,7 @@
 
   async function carregarSolicitacoes(campanhaId) {
     // RLS libera SELECT pro mestre em solicitacoes_entrada da própria
-    // campanha (ver migração 009). Filtramos por 'pendente' aqui —
+    // campanha. Filtramos por 'pendente' aqui —
     // aprovadas/rejeitadas ficam na tabela como histórico, mas não
     // precisam aparecer nesta lista de ação.
     const { data, error } = await sb
@@ -1457,7 +1464,7 @@
 
   // -----------------------------------------------------------
   // Solicitações de entrada — só mestre. Lista pedidos pendentes de
-  // campanhas com entrada_aberta = false (ver migração 009) e permite
+  // campanhas com entrada_aberta = false e permite
   // aprovar (vincula o personagem) ou rejeitar.
   // -----------------------------------------------------------
   function atualizarBadgeSolicitacoes() {
@@ -1479,31 +1486,20 @@
       return;
     }
 
-    // solicitacoes_entrada só guarda personagem_id/solicitante_id —
-    // busca os personagens (ainda soltos, sem campanha_id) e os
-    // perfis dos solicitantes à parte, já que carregarPersonagens()
-    // só traz quem JÁ está na campanha.
-    const personagemIds = solicitacoesPendentes.map(s => s.personagem_id);
     const solicitanteIds = [...new Set(solicitacoesPendentes.map(s => s.solicitante_id))];
 
-    const [{ data: personagensCandidatos, error: erroPersonagens }, { data: perfis, error: erroPerfis }] = await Promise.all([
-      sb.from('personagens').select('*').in('id', personagemIds),
-      sb.from('usuarios').select('*').in('id', solicitanteIds),
-    ]);
+    const { data: perfis, error: erroPerfis } = await sb
+      .from('usuarios').select('*').in('id', solicitanteIds);
 
-    if (erroPersonagens) console.error('[campanha-etherion] erro ao carregar personagens das solicitações:', erroPersonagens.message);
     if (erroPerfis) console.error('[campanha-etherion] erro ao carregar perfis dos solicitantes:', erroPerfis.message);
 
-    const personagensPorId = {};
-    (personagensCandidatos || []).forEach(p => { personagensPorId[p.id] = p; });
     const perfisPorId = {};
     (perfis || []).forEach(p => { perfisPorId[p.id] = p; });
 
     const list = document.getElementById('solicitacoesList');
     list.innerHTML = solicitacoesPendentes.map(s => {
-      const personagem = personagensPorId[s.personagem_id];
       const perfil = perfisPorId[s.solicitante_id];
-      const nomePersonagem = esc(personagem?.nome || 'Personagem removido');
+      const nomePersonagem = esc(s.personagem_nome);
       const nomeJogador = esc(perfil?.username || 'Jogador desconhecido');
       const avatar = perfil?.avatar_url ? esc(perfil.avatar_url) : '';
       return `

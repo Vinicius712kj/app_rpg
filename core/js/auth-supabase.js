@@ -43,22 +43,24 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://qqaatpndnngdczatpjxf.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_zhHOZiEV-YipHcW8GNPwvQ_F4s40QmK';
+const SUPABASE_URL = 'https://bpzxktozyxlivfxiztmo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_yU4AoaCfhLIpVRFWi2bFig_FJA0bU2w';
+const SUPABASE_PROJECT_REF = new URL(SUPABASE_URL).hostname.split('.')[0];
+const CHAVE_ACAO_PENDENTE = 'auth_acao_pendente_' + SUPABASE_PROJECT_REF;
 
 // Opções explícitas de persistência de sessão. persistSession,
 // autoRefreshToken e detectSessionInUrl já são true por padrão no SDK
 // v2 — deixamos explícito aqui pra ficar claro no código que a
 // persistência entre fechamentos de navegador/F5 é intencional e não
 // pode ser removida sem entender o impacto (login teria que ser
-// refeito toda vez). storageKey customizado só documenta que essa
-// chave pertence à Forja — não muda comportamento de fato.
+// refeito toda vez). A chave inclui o projeto para isolar sessões de
+// projetos diferentes do Supabase.
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    storageKey: 'forja-auth-token',
+    storageKey: 'forja-auth-token-' + SUPABASE_PROJECT_REF,
   }
 });
 
@@ -262,18 +264,9 @@ function _injetarModal() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
-        // NUNCA usar window.location.href aqui — se o usuário clicar
-        // em "Entrar" estando em qualquer página que não seja a raiz
-        // (ex: /livros/livros-sistema.html, /fichas/etherion-ficha.html),
-        // o Discord devolveria o token pra ESSA página, que pode não
-        // ter o SDK Supabase carregado ou ter algum redirect automático
-        // que navega pra outro lugar antes do hash #access_token=...
-        // ser processado — o token se perde, nunca é salvo no
-        // localStorage, e a sessão "logada" só existe em memória por
-        // uns segundos antes de sumir. Sempre redirecionamos pra raiz,
-        // que é a única página que com certeza tem o auth-supabase.js
-        // carregado e não vai navegar pra lugar nenhum antes de processar.
-        redirectTo: window.location.origin + '/'
+        // Volta ao hub, que carrega a sessão e retoma ações pendentes.
+        // Resolver a partir do módulo preserva o subdiretório de publicação.
+        redirectTo: new URL('../../', import.meta.url).href
       }
     });
     if (error) {
@@ -342,7 +335,7 @@ function _fecharModal() {
 //   });
 
 export function guardarAcaoPendente(nomeAcao, dados) {
-  sessionStorage.setItem('auth_acao_pendente', JSON.stringify({ nomeAcao, dados }));
+  sessionStorage.setItem(CHAVE_ACAO_PENDENTE, JSON.stringify({ nomeAcao, dados }));
 }
 
 // Lê e REMOVE a ação pendente, se o nome bater (ou se nenhum nome for
@@ -350,12 +343,12 @@ export function guardarAcaoPendente(nomeAcao, dados) {
 // se não houver nada — chamadas seguras de fazer sempre no load da
 // página, sem precisar checar antes se existe.
 export function consumirAcaoPendente(nomeAcao) {
-  const raw = sessionStorage.getItem('auth_acao_pendente');
+  const raw = sessionStorage.getItem(CHAVE_ACAO_PENDENTE);
   if (!raw) return null;
   let parsed;
-  try { parsed = JSON.parse(raw); } catch (e) { sessionStorage.removeItem('auth_acao_pendente'); return null; }
+  try { parsed = JSON.parse(raw); } catch (e) { sessionStorage.removeItem(CHAVE_ACAO_PENDENTE); return null; }
   if (nomeAcao && parsed.nomeAcao !== nomeAcao) return null;
-  sessionStorage.removeItem('auth_acao_pendente');
+  sessionStorage.removeItem(CHAVE_ACAO_PENDENTE);
   return parsed.dados;
 }
 

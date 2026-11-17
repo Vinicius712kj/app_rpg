@@ -119,12 +119,11 @@ urlCampanha: 'sistemas/etherion/campanha-etherion.html',
 
 ---
 
-## CREDENCIAIS SUPABASE (anon/publishable — seguras no frontend)
+## CONFIGURAÇÃO ATUAL DO SUPABASE
 
-```js
-const SUPABASE_URL = 'https://qqaatpndnngdczatpjxf.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_zhHOZiEV-YipHcW8GNPwvQ_F4s40QmK';
-```
+A URL e a chave pública do projeto ficam em `core/js/auth-supabase.js`.
+Para criar as tabelas, permissões e funções em um projeto novo, execute
+`supabase/migrations/20261117000000_forja.sql` no SQL Editor.
 
 ---
 
@@ -163,7 +162,7 @@ import {
 
 ---
 
-## SCHEMA DO BANCO (estado atual após migrações 001-008)
+## SCHEMA DO BANCO (referência histórica das migrações 001-008)
 
 ### Tabelas relevantes pra campanha-etherion.html:
 
