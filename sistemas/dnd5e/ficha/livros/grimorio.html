@@ -419,7 +419,11 @@ const MAPA_CLASSE = {
 // Classes do sistema que não têm acesso a magias (lista de conjuradores)
 const CLASSES_SEM_MAGIA = ['Bárbaro', 'Guerreiro', 'Ladino', 'Monge'];
 
-let sb = null;
+import { abrirRepositorioFicha } from '../repositorio-ficha.js';
+import { temAcessoAoNivelDaMagia } from '../../data/recursos.js';
+import { calcularSpellSlots } from '../../data/espacos-magicos.js';
+
+let repositorio = null;
 let TODOS_PERSONAGENS = [];
 let PERSONAGEM_ATUAL = null;
 let CLASSE_ATUAL = null; // nome já mapeado p/ banco de magias
@@ -428,31 +432,12 @@ let filtroNivel = null;       // null = todos
 let filtroEscola = '';
 let filtroBusca = '';
 
-// =============================================================
-// SUPABASE — mesmo cliente/sessão do shell. Este arquivo roda num
-// iframe dentro do iframe da ficha, que por sua vez roda dentro do
-// shell — window.top aponta direto pro shell (index.html raiz),
-// que é quem expõe window.supabaseClient.
-// =============================================================
-async function obterClienteSupabase() {
-  if (window.top && window.top !== window && window.top.supabaseClient) {
-    return window.top.supabaseClient;
-  }
-  // Fallback: aberto fora da árvore do shell (acesso direto/teste).
-  const mod = await import('../../../../core/js/auth-supabase.js');
-  return mod.supabase;
-}
-
 // Busca todos os personagens de D&D 5e que pertencem ao usuário
 // logado. RLS do Supabase já restringe a leitura ao dono (e a
 // personagens de campanhas às quais ele tem acesso), então não
 // precisamos filtrar por dono_id explicitamente aqui.
 async function loadPersonagens() {
-  const { data, error } = await sb
-    .from('personagens')
-    .select('*')
-    .eq('sistema', 'dnd5e')
-    .order('criado_em', { ascending: true });
+  const { data, error } = await repositorio.listar();
 
   if (error) {
     console.error('[grimorio] erro ao carregar personagens:', error.message);
@@ -705,17 +690,10 @@ function statusAprendizado(m) {
     return { podeAprender: false, jaAprendida: true, motivo: 'Você já conhece esta magia.' };
   }
 
-  // "Aprender" aqui significa "adicionar ao grimório/repertório" — sem limite de
-  // quantidade (cobre o caso de homebrews com grimório de páginas infinitas, etc).
-  // A única checagem é se o personagem JÁ TEM ACESSO àquele círculo de magia,
-  // ou seja, se spellSlots[nivel].max > 0 (calculado pela classe+nível na ficha).
-  // Quantas magias ele pode ter PRONTAS PRA USAR ao mesmo tempo é controlado
-  // separadamente pelo checkbox "preparada" na aba Combate, limitado pelos
-  // Espaços de Magia (ver toggleMagiaPreparada em rpg-interface.js).
-  const slotDoNivel = (d.spellSlots && d.spellSlots[m.nivel]) || { max: 0 };
-  const maxCirculo = slotDoNivel.max || 0;
-
-  if (maxCirculo === 0) {
+  // Usa a progressão da classe para fichas que ainda não salvaram todos os espaços.
+  const espacos = Object.fromEntries(Object.entries(calcularSpellSlots(classeOriginal, d.level))
+    .map(([nivel, max]) => [nivel, d.spellSlots?.[nivel] ?? { max }]));
+  if (!temAcessoAoNivelDaMagia(espacos, m.nivel)) {
     return {
       podeAprender: false,
       motivo: m.nivel === 0
@@ -754,13 +732,11 @@ async function aprenderMagia(nomeEncoded) {
   if (!d.spells) d.spells = [];
   d.spells.push({
     id: 'sp_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-    nome: m.nome, nivel: m.nivel, preparada: false, escola: m.escola
+    nome: m.nome, nivel: m.nivel, preparada: false, escola: m.escola,
+    concentracao: m.concentracao === true
   });
 
-  const { error } = await sb
-    .from('personagens')
-    .update({ dados: d })
-    .eq('id', PERSONAGEM_ATUAL.id);
+  const { error } = await repositorio.salvar(PERSONAGEM_ATUAL.id, { dados: d });
 
   if (error) {
     console.error('[grimorio] falha ao salvar magia:', error.message);
@@ -811,7 +787,7 @@ document.addEventListener('keydown', (e) => {
 // INICIALIZAÇÃO
 // =============================================================
 async function init() {
-  sb = await obterClienteSupabase();
+  repositorio = await abrirRepositorioFicha(window.top);
   TODOS_PERSONAGENS = await loadPersonagens();
   popularSeletorEscolas();
   popularPillsNivel();

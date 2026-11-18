@@ -25,7 +25,25 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 10px;
+    flex-wrap: wrap;
   }
+  .char-mini-dados { flex: 1 1 200px; min-width: 0; }
+  .char-mini-dados strong { color: var(--gold-light); }
+  .campanha-info, .campanha-acoes, .ordem-linha {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  }
+  .campanha-info { margin: 0 0 12px; justify-content: space-between; }
+  .campanha-info[hidden], .campanha-acoes[hidden], #topbarInterno[hidden] { display: none; }
+  .campanha-ferramentas {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; align-items: end;
+  }
+  .campanha-ferramentas label { display: grid; gap: 4px; }
+  .campanha-ferramentas input, .campanha-ferramentas select { min-width: 0; }
+  .ordem-iniciativa { padding-inline-start: 24px; }
+  .ordem-linha { justify-content: space-between; padding-block: 7px; }
+  .ordem-linha input { width: 68px; }
+  .resultado-dados { margin-top: 12px; }
+  .resultado-dados:empty { margin: 0; }
   .char-mini-name {
     font-family: 'Cinzel Decorative', serif;
     color: var(--gold);
@@ -81,7 +99,14 @@
 
 <!-- ===== PAGE WRAP ===== -->
 <div class="sheet-wrap">
-  <img id="camp_banner" class="dash-banner" style="display:none;">
+  <img id="camp_banner" class="dash-banner" alt="" style="display:none;">
+  <div class="box campanha-info" id="campanhaInfo" hidden>
+    <span id="campanhaPapel"></span>
+    <div class="campanha-acoes" id="campanhaConvite" hidden>
+      <span>Código de convite: <strong id="codigoConvite"></strong></span>
+      <button class="btn-action" type="button" id="copiarConvite">Copiar código</button>
+    </div>
+  </div>
 
   <!-- TELA 1: PERSONAGENS -->
   <div id="panel-personagens" class="sheet-panel active">
@@ -93,6 +118,10 @@
         </div>
       </div>
     </div>
+    <section id="pedidosEntrada" class="box" hidden aria-labelledby="tituloPedidos">
+      <h2 class="box-title" id="tituloPedidos">Pedidos de entrada</h2>
+      <div id="listaPedidos"></div>
+    </section>
   </div>
 
   <!-- TELA 2: NPCs -->
@@ -107,30 +136,43 @@
 
   <!-- TELA 3: COMBATES -->
   <div id="panel-combates" class="sheet-panel">
-    <div class="panel-title">Mesa de Combate e Iniciativa</div>
+    <div class="panel-title">Ordem de iniciativa</div>
     <div class="box">
-      <div class="empty-state">
-        <div class="empty-state-text">A ordem de iniciativa e controle de monstros ficará aqui.</div>
-      </div>
+      <p class="char-mini-info">A ordem fica nesta aba durante a sessão.</p>
+      <ol class="ordem-iniciativa" id="ordemIniciativa"></ol>
+      <button class="btn-action" type="button" id="rolarIniciativa" disabled>Rolar todas</button>
     </div>
   </div>
 
   <!-- TELA 4: DADOS -->
   <div id="panel-dados" class="sheet-panel">
-    <div class="panel-title">Rolador de Dados do Mestre</div>
+    <div class="panel-title">Rolagens de d20</div>
     <div class="box">
-      <div class="empty-state">
-        <div class="empty-state-text">Ferramentas de rolagem rápida e tabelas aleatórias em breve.</div>
-      </div>
+      <form id="roladorCampanha">
+        <div class="campanha-ferramentas">
+          <label>Modificador <input class="spell-meta-input" name="modificador" type="number" min="-99" max="99" value="0" required></label>
+          <label>Tipo de rolagem
+            <select class="spell-meta-input" name="modo">
+              <option value="normal">Normal</option>
+              <option value="vantagem">Vantagem</option>
+              <option value="desvantagem">Desvantagem</option>
+            </select>
+          </label>
+          <label>CD (opcional) <input class="spell-meta-input" name="cd" type="number" min="1" max="999"></label>
+          <button class="btn-action" type="submit" disabled>Rolar d20</button>
+        </div>
+        <p class="resultado-dados" id="resultadoDados" role="status"></p>
+      </form>
     </div>
   </div>
 
   <!-- TELA 5: DIÁRIO / ANOTAÇÕES -->
   <div id="panel-diario" class="sheet-panel">
-    <div class="panel-title">Crônicas & Notas do Mestre</div>
+    <div class="panel-title">Diário da campanha</div>
     <div class="box">
-      <textarea id="camp_diario" class="text-box" style="height: 500px; background:rgba(0,0,0,0.5);" placeholder="O que aconteceu na última sessão?"></textarea>
-      <button class="add-row-btn" style="margin-top:12px; width:auto; border-style:solid;" onclick="salvarDiario()">Gravar Anotações</button>
+      <textarea id="camp_diario" aria-label="Diário da campanha" class="text-box" style="height: 500px; background:rgba(0,0,0,0.5);" placeholder="O que aconteceu na última sessão?" readonly></textarea>
+      <p id="diarioLeitura" class="char-mini-info" hidden>O mestre escreve o diário. O grupo pode ler.</p>
+      <button id="salvarDiario" class="btn-action" style="margin-top:12px" type="button" hidden>Salvar diário</button>
     </div>
   </div>
 
@@ -138,214 +180,6 @@
 
 <div class="toast-container" id="toastContainer"></div>
 
-<script type="module">
-  // =============================================================
-  // SUPABASE — mesma origem do shell (index.html), então o client
-  // exposto em window.parent.supabaseClient já carrega com a sessão
-  // ativa (auth-supabase.js só roda uma vez, no shell). Se a página
-  // for aberta fora do iframe (sem window.parent != window), caímos
-  // de volta para importar o módulo diretamente.
-  // =============================================================
-  let sb = null;
-  let campanha = null;
-  let personagens = [];
-  const rodandoNoIframe = window.parent && window.parent !== window;
-
-  function esc(str) {
-    return String(str ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  function avisarShell(tipo, payload) {
-    if (!rodandoNoIframe) return;
-    window.parent.postMessage({ tipo, payload }, window.location.origin);
-  }
-
-  function voltar() {
-    if (rodandoNoIframe) {
-      avisarShell('ficha:voltar');
-    } else {
-      window.location.href = '/';
-    }
-  }
-  document.getElementById('btnVoltar').addEventListener('click', voltar);
-
-  // Esconde o topbar interno quando rodando dentro do shell — o
-  // shell já mostra seu próprio topbar (#topbar-sheet) com Voltar +
-  // título + indicador de salvo, então mostrar os dois seria
-  // redundante.
-  if (rodandoNoIframe) {
-    document.getElementById('topbarInterno').style.display = 'none';
-  }
-
-  async function obterClienteSupabase() {
-    if (rodandoNoIframe && window.parent.supabaseClient) {
-      return window.parent.supabaseClient;
-    }
-    // Fallback: página aberta fora do iframe (acesso direto/teste).
-    const mod = await import('../../../core/js/auth-supabase.js');
-    return mod.supabase;
-  }
-
-  async function init() {
-    sb = await obterClienteSupabase();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    if (!id) {
-      document.getElementById('camp_nome').value = 'Campanha não encontrada';
-      mostrarVazio('charsList', 'Nenhum ID de campanha informado na URL.');
-      return;
-    }
-
-    // RLS do Supabase já restringe a leitura a campanhas que o
-    // usuário pode ver (é o mestre, ou tem personagem nela). Mesmo
-    // assim, .single() garante que só tratamos um resultado e
-    // erro/ausência são tratados explicitamente abaixo.
-    const { data, error } = await sb
-      .from('campanhas')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error || !data) {
-      console.error('[campanha-dnd] erro ao carregar campanha:', error?.message);
-      document.getElementById('camp_nome').value = 'Campanha não encontrada';
-      avisarShell('ficha:titulo', 'Campanha não encontrada');
-      mostrarVazio('charsList', 'Não foi possível carregar esta campanha.');
-      return;
-    }
-
-    campanha = data;
-    const extra = campanha.dados || {};
-
-    document.getElementById('camp_nome').value = campanha.nome;
-    avisarShell('ficha:titulo', campanha.nome);
-
-    if (extra.banner) {
-      const bannerEl = document.getElementById('camp_banner');
-      bannerEl.src = extra.banner;
-      bannerEl.style.display = 'block';
-    }
-
-    document.getElementById('camp_diario').value = extra.diario || '';
-
-    await carregarPersonagens(id);
-  }
-
-  async function carregarPersonagens(campanhaId) {
-    const { data, error } = await sb
-      .from('personagens')
-      .select('*')
-      .eq('campanha_id', campanhaId)
-      .order('criado_em', { ascending: true });
-
-    if (error) {
-      console.error('[campanha-dnd] erro ao carregar personagens:', error.message);
-      mostrarVazio('charsList', 'Erro ao carregar personagens desta campanha.');
-      return;
-    }
-
-    personagens = data || [];
-    renderChars();
-  }
-
-  function mostrarVazio(containerId, texto) {
-    document.getElementById(containerId).innerHTML =
-      `<div class="empty-state"><div class="empty-state-text">${esc(texto)}</div></div>`;
-  }
-
-  function renderChars() {
-    if (personagens.length === 0) {
-      mostrarVazio('charsList', 'Nenhum personagem associado a este grupo.');
-      return;
-    }
-
-    const charsList = document.getElementById('charsList');
-    charsList.innerHTML = personagens.map(p => {
-      const d = p.dados || {};
-      const raca = esc(d.race || 'Desconhecido');
-      const cls = esc(d.cls || '');
-      const nivel = esc(d.level ?? 1);
-      const nome = esc(p.nome);
-      return `
-      <div class="char-mini-card">
-        <div style="flex:1;">
-          <div class="char-mini-name">${nome}</div>
-          <div class="char-mini-info">${raca} ${cls} - Nível ${nivel}</div>
-        </div>
-        <button class="btn-action" data-pid="${esc(p.id)}">Abrir Ficha</button>
-      </div>
-    `;
-    }).join('');
-
-    // Listeners via data-attribute em vez de onclick inline com nome
-    // interpolado — onclick="...${p.nome}..." seria outro vetor de
-    // injeção se o nome contiver aspas, independente do esc() acima.
-    charsList.querySelectorAll('.btn-action[data-pid]').forEach(btn => {
-      btn.addEventListener('click', () => abrirFichaPersonagem(btn.dataset.pid));
-    });
-  }
-
-  function abrirFichaPersonagem(pid) {
-    const url = `/sistemas/dnd5e/ficha/ficha.html?id=${encodeURIComponent(pid)}`;
-    if (rodandoNoIframe) {
-      // Pede para o shell trocar a ficha aberta no MESMO iframe pai —
-      // não faz sentido aninhar um segundo iframe dentro deste.
-      avisarShell('ficha:abrir', url);
-    } else {
-      window.location.href = url;
-    }
-  }
-
-  function switchTab(tabId) {
-    document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector(`.sheet-tab[data-tab="${tabId}"]`).classList.add('active');
-
-    document.querySelectorAll('.sheet-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-' + tabId).classList.add('active');
-  }
-
-  async function salvarDiario() {
-    if (!campanha) return;
-    const novoDiario = document.getElementById('camp_diario').value;
-    const novosDados = { ...(campanha.dados || {}), diario: novoDiario };
-
-    const { error } = await sb
-      .from('campanhas')
-      .update({ dados: novosDados })
-      .eq('id', campanha.id);
-
-    if (error) {
-      console.error('[campanha-dnd] erro ao salvar diário:', error.message);
-      showToast('⚠ Erro ao salvar anotações.');
-      avisarShell('ficha:erro-salvo');
-      return;
-    }
-
-    campanha.dados = novosDados;
-    showToast('Anotações salvas com sucesso!');
-    avisarShell('ficha:salvo');
-  }
-
-  function showToast(msg) {
-    const cont = document.getElementById('toastContainer');
-    const t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg; // texto fixo nosso, não dado do banco — innerHTML não seria necessário aqui de qualquer forma
-    cont.appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3000);
-  }
-
-  // Expostas pro onclick inline dos botões de tab/salvar no HTML acima
-  window.switchTab = switchTab;
-  window.salvarDiario = salvarDiario;
-
-  init();
-</script>
+<script type="module" src="campanha.js"></script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+{
+  "name": "forja-next-preview",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "predev": "node scripts/sync-site.mjs",
+    "dev": "next dev --hostname 127.0.0.1",
+    "prebuild": "node scripts/sync-site.mjs",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

@@ -249,7 +249,7 @@ function _injetarModal() {
   backdrop.id = 'authModalBackdrop';
   backdrop.innerHTML = `
     <div class="auth-modal-box">
-      <div class="auth-modal-title">✦ Entrar na Forja</div>
+      <div class="auth-modal-title">Entrar na Forja</div>
       <div class="auth-modal-sub" id="authModalMensagem">Esta ação precisa que você esteja logado.</div>
       <button class="auth-modal-btn-discord" id="authModalBtnDiscord">
         <svg width="18" height="14" viewBox="0 0 71 55" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.1.3a.2.2 0 0 0-.2.1c-.6 1.2-1.4 2.7-1.9 3.9a54 54 0 0 0-16.3 0c-.5-1.2-1.3-2.7-1.9-3.9a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 9.5 4.9a.2.2 0 0 0-.1.1C1.6 16.5-1 27.8.3 39a.2.2 0 0 0 .1.2 60.4 60.4 0 0 0 18.3 9.3.2.2 0 0 0 .2-.1c1.4-2 2.6-4 3.7-6.2a.2.2 0 0 0-.1-.3 39.6 39.6 0 0 1-5.7-2.7.2.2 0 0 1 0-.4c.4-.3.8-.6 1.1-.8a.2.2 0 0 1 .2 0c12 5.5 25 5.5 36.9 0a.2.2 0 0 1 .2 0c.4.3.7.5 1.1.8a.2.2 0 0 1 0 .4c-1.8 1.1-3.7 1.9-5.7 2.7a.2.2 0 0 0-.1.3c1.1 2.1 2.4 4.2 3.7 6.2a.2.2 0 0 0 .2.1A60.3 60.3 0 0 0 72.6 39a.2.2 0 0 0 .1-.2c1.6-13-2.5-24.3-9.1-33.8a.2.2 0 0 0-.1-.1ZM23.8 32c-3.6 0-6.6-3.3-6.6-7.3s2.9-7.3 6.6-7.3c3.7 0 6.7 3.3 6.6 7.3 0 4-2.9 7.3-6.6 7.3Zm24.2 0c-3.6 0-6.6-3.3-6.6-7.3s2.9-7.3 6.6-7.3c3.7 0 6.6 3.3 6.6 7.3 0 4-2.9 7.3-6.6 7.3Z" fill="white"/></svg>

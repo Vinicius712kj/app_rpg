@@ -1,3 +1,28 @@
+/* Recorte de Material Symbols Outlined, distribuído com a licença em assets/fonts. */
+@font-face {
+  font-family: 'Forja Icons';
+  src: url('../../assets/fonts/forja-icons.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: block;
+}
+
+.ui-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  font: 300 var(--icon-size, 1.15em)/1 'Forja Icons';
+  font-feature-settings: 'liga';
+  font-synthesis: none;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  vertical-align: -.14em;
+}
+.ui-icon::before { content: attr(data-icon); }
+
 :root {
   --parchment:       #F2E8D5;
   --parchment-dark:  #E0C89A;
@@ -86,6 +111,8 @@ body {
   z-index: 99;
   box-shadow: 0 2px 12px rgba(0,0,0,0.5);
 }
+#topbar-hub { overflow-x: auto; scrollbar-width: thin; }
+.pnav-tab .ui-icon { --icon-size: 16px; }
 .pnav-tab {
   font-family: 'Cinzel', serif;
   font-size: 12px; letter-spacing: 2.5px;
@@ -106,6 +133,10 @@ body {
   background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.25);
   color: var(--gold); font-size: 9px; padding: 1px 7px;
   border-radius: 20px; font-family: 'Cinzel', serif; letter-spacing: 1px;
+}
+@media (max-width: 640px) {
+  #topbar-hub { padding-inline: 12px; }
+  #topbar-hub .pnav-tab { padding: 14px 12px; letter-spacing: 1.5px; }
 }
 
 /* ===== SECTIONS ===== */
@@ -273,6 +304,7 @@ body {
   cursor: pointer; transition: all 0.22s;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 10px; min-height: 140px;
+  width: 100%;
 }
 .new-card:hover { border-color: var(--gold-dark); background: rgba(201,168,76,0.04); }
 .new-card-icon { font-size: 26px; color: var(--gold); opacity: 0.4; transition: opacity 0.2s; }
@@ -418,6 +450,9 @@ button.btn-ghost { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing
 button.btn-ghost:hover { border-color: var(--gold-dark); color: var(--gold); }
 button.btn-gold { display: inline-block; }
 button.btn-gold:hover { background: rgba(201,168,76,0.22); }
+button.com-icone { display: inline-flex; align-items: center; gap: 7px; }
+button.com-icone .ui-icon { --icon-size: 16px; }
+.modal-title .ui-icon { margin-inline-end: 4px; }
 
 /* DETALHE CAMPANHA */
 .det-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }

@@ -88,79 +88,6 @@ const COMBO_DATA = {
 // Fonte: PHB tabelas de classe — "Cantrips Known" por nível 1-20.
 // Artífice: não contemplado (retorna zerado).
 // =============================================================
-function calcularSpellSlots(classe, nivel) {
-  const nv = Math.min(Math.max(parseInt(nivel) || 1, 1), 20);
-
-  // Full caster: Mago, Clérigo, Druida, Bardo, Feiticeiro — slots níveis 1-9
-  const FULL_CASTER_TABLE = [
-    [2,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],
-    [4,3,2,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],
-    [4,3,3,3,1,0,0,0,0],[4,3,3,3,2,0,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,0,0,0],
-    [4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,0],
-    [4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1],
-  ];
-
-  // Half caster: Paladino, Patrulheiro — slots níveis 1-5
-  const HALF_CASTER_TABLE = [
-    [0,0,0,0,0],[2,0,0,0,0],[3,0,0,0,0],[3,0,0,0,0],[4,2,0,0,0],[4,2,0,0,0],
-    [4,3,0,0,0],[4,3,0,0,0],[4,3,2,0,0],[4,3,2,0,0],[4,3,3,0,0],[4,3,3,0,0],
-    [4,3,3,1,0],[4,3,3,1,0],[4,3,3,2,0],[4,3,3,2,0],[4,3,3,3,1],[4,3,3,3,1],
-    [4,3,3,3,2],[4,3,3,3,2],
-  ];
-
-  // Pact Magic: Bruxo — slots poucos mas todos no círculo mais alto disponível
-  const PACT_MAGIC_TABLE = [
-    {qtd:1,circulo:1},{qtd:2,circulo:1},{qtd:2,circulo:2},{qtd:2,circulo:2},{qtd:2,circulo:3},
-    {qtd:2,circulo:3},{qtd:2,circulo:4},{qtd:2,circulo:4},{qtd:2,circulo:5},{qtd:2,circulo:5},
-    {qtd:3,circulo:5},{qtd:3,circulo:5},{qtd:3,circulo:5},{qtd:3,circulo:5},{qtd:3,circulo:5},
-    {qtd:3,circulo:5},{qtd:4,circulo:5},{qtd:4,circulo:5},{qtd:4,circulo:5},{qtd:4,circulo:5},
-  ];
-
-  // ── Truques conhecidos por classe e nível (Cantrips Known, PHB) ──────────
-  // Mago: 3 no nv 1, +1 nos níveis 4 e 10 → 3/3/3/4/4/4/4/4/4/5/5/5/5/5/5/5/5/5/5/5
-  const CANTRIPS_MAGO        = [3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5];
-  // Clérigo: 3 no nv 1, +1 nos níveis 4 e 10
-  const CANTRIPS_CLERIGO     = [3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5];
-  // Druida: 2 no nv 1, +1 nos níveis 4 e 10
-  const CANTRIPS_DRUIDA      = [2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4];
-  // Bardo: 2 no nv 1, +1 nos níveis 4 e 10
-  const CANTRIPS_BARDO       = [2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4];
-  // Feiticeiro: 4 no nv 1, +1 nos níveis 4 e 10
-  const CANTRIPS_FEITICEIRO  = [4,4,4,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6];
-  // Bruxo: 2 no nv 1, +1 nos níveis 4 e 10
-  const CANTRIPS_BRUXO       = [2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4];
-  // Paladino e Patrulheiro: sem truques (lista vazia → 0 para todos os níveis)
-  // Bárbaro, Guerreiro, Ladino, Monge: sem conjuração
-
-  const FULL_CASTERS  = ['Mago','Clérigo','Druida','Bardo','Feiticeiro'];
-  const HALF_CASTERS  = ['Paladino','Patrulheiro'];
-
-  // Inicializa slots 0-9 com zero
-  const slots = {};
-  for (let i = 0; i <= 9; i++) slots[String(i)] = 0;
-
-  if (FULL_CASTERS.includes(classe)) {
-    FULL_CASTER_TABLE[nv-1].forEach((qtd, i) => { slots[String(i+1)] = qtd; });
-    // Truques por full caster
-    const cantripMap = {
-      'Mago': CANTRIPS_MAGO, 'Clérigo': CANTRIPS_CLERIGO, 'Druida': CANTRIPS_DRUIDA,
-      'Bardo': CANTRIPS_BARDO, 'Feiticeiro': CANTRIPS_FEITICEIRO
-    };
-    slots['0'] = (cantripMap[classe] || [])[nv-1] || 0;
-  } else if (HALF_CASTERS.includes(classe)) {
-    HALF_CASTER_TABLE[nv-1].forEach((qtd, i) => { slots[String(i+1)] = qtd; });
-    // Paladino e Patrulheiro não têm truques — slots['0'] permanece 0
-  } else if (classe === 'Bruxo') {
-    const { qtd, circulo } = PACT_MAGIC_TABLE[nv-1];
-    slots[String(circulo)] = qtd;
-    slots['0'] = CANTRIPS_BRUXO[nv-1] || 0;
-  }
-  // Bárbaro, Guerreiro, Ladino, Monge, Artífice (não implementado),
-  // classe vazia ou não reconhecida → tudo zerado.
-
-  return slots;
-}
-
 // Recalcula os slots MÁXIMOS automaticamente a partir da classe+nível do
 // personagem, preservando o quanto já foi "usado" no dia (não reseta o
 // progresso de combate ao mudar nível/classe). Não sobrescreve um override
@@ -220,7 +147,7 @@ const SLOTS_MAX_PADRAO = [4,3,3,3,2,1,1,1,1]; // nível de magia 1..9, placehold
 
 // ─── Ícone d20 inline (SVG) ───────────────────────────────────────────────
 // Gerado com a paleta da interface: pedra escura + ouro
-const D20_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="18" height="18" style="display:block;flex-shrink:0">
+const D20_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="18" height="18" aria-hidden="true" style="display:block;flex-shrink:0">
 <defs><filter id="gd"><feGaussianBlur stdDeviation="1.2" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter></defs>
 <ellipse cx="50" cy="91" rx="24" ry="3.5" fill="rgba(0,0,0,0.4)"/>
 <polygon points="50,6 50,27.6 68.4,41" fill="rgba(201,168,76,0.22)" stroke="#C9A84C" stroke-width="0.8" stroke-linejoin="round"/>
@@ -249,52 +176,45 @@ const D20_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" w
 </svg>`;
 
 // ─── Rolagem de dado ───────────────────────────────────────────────────────
-function rolarD20(nomePericia, modificador) {
-  const dado = Math.floor(Math.random() * 20) + 1;
-  const total = dado + modificador;
-  const modStr = modificador >= 0 ? `+${modificador}` : `${modificador}`;
+function botaoRolagemD20(nome, modificador, rotulo) {
+  return `<button type="button" class="d20-btn" data-rolagem="${esc(nome)}" data-modificador="${modificador}"
+    aria-label="${esc(rotulo)}" title="${esc(rotulo)} (1d20${fmtMod(modificador)})"
+    onclick="abrirRolagemD20(this)">${D20_SVG}</button>`;
+}
 
-  // Classifica resultado
-  let classe = '';
-  let prefixo = '';
-  if (dado === 20) { classe = 'roll-nat20'; prefixo = '⚡ NAT 20! '; }
-  else if (dado === 1)  { classe = 'roll-nat1';  prefixo = '💀 FALHA CRÍTICA! '; }
-  else if (total >= 20) { classe = 'roll-great'; }
-  else if (total <= 5)  { classe = 'roll-bad'; }
+function abrirRolagemD20(botao) {
+  const dialogo = document.getElementById('dialog-rolagem-d20');
+  const form = dialogo.querySelector('form');
+  form.reset();
+  form.elements.modificador.value = botao.dataset.modificador;
+  dialogo.querySelector('h2').textContent = botao.dataset.rolagem;
+  dialogo.querySelector('.roll-modificador').textContent = `Modificador da ficha: ${fmtMod(botao.dataset.modificador)}`;
+  dialogo.querySelector('.roll-resultado').replaceChildren();
+  dialogo.showModal();
+}
 
-  // Monta HTML do toast de rolagem (substituir o toast normal por um mais rico)
-  const c = document.getElementById('toastContainer');
-  const t = document.createElement('div');
-  t.className = `toast roll-toast ${classe}`;
-  t.innerHTML = `
-    <div class="roll-toast-header">${nomePericia}</div>
-    <div class="roll-toast-body">
-      <span class="roll-dado">${dado}</span>
-      <span class="roll-op">${modStr}</span>
-      <span class="roll-igual">=</span>
-      <span class="roll-total">${total}</span>
-    </div>
-    <div class="roll-toast-sub">${prefixo}d20 (${dado}) ${modStr}</div>
-  `;
-  c.appendChild(t);
-
-  // Animação de entrada + saída
-  t.style.opacity = '0';
-  t.style.transform = 'translateX(30px) scale(0.92)';
-  t.style.transition = 'all 0.25s cubic-bezier(.22,.68,0,1.4)';
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      t.style.opacity = '1';
-      t.style.transform = 'translateX(0) scale(1)';
-    });
+function confirmarRolagemD20(evento) {
+  evento.preventDefault();
+  const form = evento.currentTarget;
+  const { modificador, modo, cd } = form.elements;
+  const resultado = resolverTesteD20(Number(modificador.value), {
+    modo: modo.value,
+    cd: cd.value === '' ? null : Number(cd.value)
   });
-
-  setTimeout(() => {
-    t.style.transition = 'all 0.3s ease';
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(30px)';
-    setTimeout(() => t.remove(), 320);
-  }, 3200);
+  const modoTexto = modo.selectedOptions[0].textContent;
+  const dados = resultado.dados.join(' e ');
+  form.querySelector('.roll-resultado').innerHTML = `
+    <p class="roll-dados">${esc(modoTexto)} · Dados: ${dados} · Usado: ${resultado.escolhido}</p>
+    <div class="roll-equacao">
+      <span class="roll-dado">${resultado.escolhido}</span>
+      <span class="roll-op">${fmtMod(resultado.modificador)}</span>
+      <span class="roll-igual">=</span>
+      <strong class="roll-total">${resultado.total}</strong>
+    </div>
+    ${resultado.cd === null ? '' : `<p class="roll-cd" data-atingiu="${resultado.atingiuCD}">
+      ${resultado.atingiuCD ? 'Atingiu' : 'Ficou abaixo da'} CD ${resultado.cd}.
+    </p>`}
+  `;
 }
 
 function bonusProficiencia(nivel) {
@@ -319,9 +239,16 @@ function fmtMod(n) {
 // (window.parent.supabaseClient) quando disponível, com fallback
 // de import direto quando a página é aberta solta (fora do shell).
 // =============================================================
-import { exigirLogin, usuarioLogado } from '../../../core/js/auth-supabase.js';
+import { abrirRepositorioFicha } from './repositorio-ficha.js';
+import { resolverTesteD20 } from '../data/rolagens.js';
+import {
+  ajustarPvMaximos, aplicarDano, atualizarPontosVida, concluirDescansoCurto, concluirDescansoLongo,
+  configurarEspaco, conjurarMagia, curar, dadosDeVida, espacosDisponiveis, gastarDadoDeVida,
+  normalizarPontosVida, precisaPrepararMagia, receberPvTemporarios
+} from '../data/recursos.js';
+import { calcularSpellSlots } from '../data/espacos-magicos.js';
 
-let sb = null;
+let repositorio = null;
 let CHAR_ID = null;
 let PERSONAGEM = null;
 const rodandoNoIframe = window.parent && window.parent !== window;
@@ -329,15 +256,6 @@ const rodandoNoIframe = window.parent && window.parent !== window;
 function avisarShell(tipo, payload) {
   if (!rodandoNoIframe) return;
   window.parent.postMessage({ tipo, payload }, window.location.origin);
-}
-
-async function obterClienteSupabase() {
-  if (rodandoNoIframe && window.parent.supabaseClient) {
-    return window.parent.supabaseClient;
-  }
-  // Fallback: página aberta fora do iframe (acesso direto/teste).
-  const mod = await import('../../../core/js/auth-supabase.js');
-  return mod.supabase;
 }
 
 function pegarIdDaUrl() {
@@ -375,12 +293,20 @@ function defaultDadosDnD() {
   };
 }
 
+function normalizarMagias(magias) {
+  return Array.isArray(magias) ? magias.filter(Boolean).map(sp => ({
+    ...sp,
+    nivel: Math.min(9, Math.max(0, parseInt(sp.nivel, 10) || 0))
+  })) : [];
+}
+
 function mesclarComDefault(dados) {
   const def = defaultDadosDnD();
   const out = { ...def, ...dados };
   out.attrs = { ...def.attrs, ...(dados.attrs||{}) };
   out.overrides = { ...(dados.overrides||{}) };
-  out.hp = { ...def.hp, ...(dados.hp||{}) };
+  out.hp = normalizarPontosVida({ ...def.hp, ...dados.hp });
+  out.hitDiceUsados = dadosDeVida(out).usados;
   out.deathSaves = { ...def.deathSaves, ...(dados.deathSaves||{}) };
   out.carga = { ...def.carga, ...(dados.carga||{}) };
   out.carteira = { ...def.carteira, ...(dados.carteira||{}) };
@@ -390,7 +316,7 @@ function mesclarComDefault(dados) {
   out.inventario = dados.inventario || [];
   out.ataquesList = dados.ataquesList || [];
   out.spellSlots = dados.spellSlots || {};
-  out.spells = dados.spells || [];
+  out.spells = normalizarMagias(dados.spells);
   // BUG 3 — garante que condições são sempre um array de strings (nunca objeto/undefined)
   out.condicoesTemp = Array.isArray(dados.condicoesTemp) ? dados.condicoesTemp.filter(x => typeof x === 'string') : [];
   out.estadosPermanentes = Array.isArray(dados.estadosPermanentes) ? dados.estadosPermanentes : [];
@@ -405,17 +331,12 @@ function mesclarComDefault(dados) {
 }
 
 async function carregarPersonagem() {
-  CHAR_ID = pegarIdDaUrl();
+  CHAR_ID = repositorio.idExemplo ?? pegarIdDaUrl();
   if (!CHAR_ID) { mostrarEstadoVazio('Nenhum personagem especificado na URL.'); return false; }
 
   // RLS do Supabase já restringe a leitura a personagens que o
   // usuário pode ver (é o dono, ou tem acesso à campanha dele).
-  const { data, error } = await sb
-    .from('personagens')
-    .select('*')
-    .eq('id', CHAR_ID)
-    .eq('sistema', 'dnd5e')
-    .single();
+  const { data, error } = await repositorio.carregar(CHAR_ID);
 
   if (error || !data) {
     console.error('[ficha-dnd] erro ao carregar personagem:', error?.message);
@@ -443,7 +364,7 @@ function voltarParaHome() {
   if (rodandoNoIframe) {
     avisarShell('ficha:voltar');
   } else {
-    window.location.href = '../../index.html';
+    window.location.href = '../../../index.html';
   }
 }
 // =============================================================
@@ -538,17 +459,21 @@ function renderPrincipal() {
             <div>
               <span class="hp-label">Pontos de Vida</span>
               <div class="hp-current-wrap">
-                <input class="hp-input" type="number" value="${d.hp.atual}" oninput="atualizarHP('atual', this.value)">
+                <input class="hp-input" id="pv-atual" aria-label="PV atuais" type="number" min="0" max="${d.hp.max}" value="${d.hp.atual}" onchange="atualizarHP('atual', this.value)">
                 <span class="hp-divider">/</span>
-                <input class="hp-max-input" type="number" value="${d.hp.max}" oninput="atualizarHP('max', this.value)">
+                <input class="hp-max-input" id="pv-max" aria-label="PV máximos" type="number" min="1" value="${d.hp.max}" onchange="atualizarHP('max', this.value)">
               </div>
             </div>
             <div class="hp-temp-wrap">
               <span class="hp-label" style="color:var(--arcane-glow)">Temp.</span>
-              <input class="hp-temp-input" type="number" value="${d.hp.temp}" oninput="atualizarHP('temp', this.value)">
+              <input class="hp-temp-input" id="pv-temp" aria-label="PV temporários" type="number" min="0" value="${d.hp.temp}" onchange="atualizarHP('temp', this.value)">
             </div>
           </div>
           <div class="hp-bar-track"><div class="hp-bar-fill" style="width:${Math.max(0,Math.min(100, (d.hp.atual/(d.hp.max||1))*100))}%"></div></div>
+          <div class="hp-acoes">
+            <button type="button" class="add-row-btn" onclick="document.getElementById('ajuste-pv').showModal()">Ajustar PV</button>
+            <button type="button" class="add-row-btn" onclick="abrirDescanso()">Descanso</button>
+          </div>
 
           <div class="death-hitdice-row">
             <div class="death-saves">
@@ -569,7 +494,7 @@ function renderPrincipal() {
             <div>
               <span class="death-saves-title">Dados de Vida</span>
               <div class="hitdice-row" style="margin-top:8px">
-                <input class="hitdice-input" type="number" min="0" value="${d.hitDiceUsados}" oninput="atualizarCampoSimples('hitDiceUsados', parseInt(this.value)||0)">
+                <input class="hitdice-input" id="dados-vida-usados" aria-label="Dados de vida usados" type="number" min="0" max="${dadosDeVida(d).total}" value="${d.hitDiceUsados}" onchange="atualizarDadosDeVida(this)">
                 <span class="death-save-text">usados de ${d.level}</span>
               </div>
             </div>
@@ -578,6 +503,47 @@ function renderPrincipal() {
 
       </div>
     </div>
+
+    <dialog class="box ficha-dialog" id="ajuste-pv" aria-labelledby="titulo-ajuste-pv">
+      <form onsubmit="aplicarAjustePV(event)">
+        <h2 class="box-title" id="titulo-ajuste-pv">Ajustar PV</h2>
+        <div class="pv-campos">
+          <label>Efeito
+            <select class="spell-meta-input" name="efeito">
+              <option value="dano">Dano recebido</option>
+              <option value="cura">Cura</option>
+              <option value="temporarios">PV temporários</option>
+            </select>
+          </label>
+          <label>Pontos
+            <input class="spell-meta-input" name="pontos" type="number" min="1" max="${Number.MAX_SAFE_INTEGER}" required>
+          </label>
+        </div>
+        <div class="ficha-dialog-acoes">
+          <button type="button" class="add-row-btn" onclick="this.closest('dialog').close()">Cancelar</button>
+          <button type="submit" class="add-row-btn">Aplicar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="box ficha-dialog" id="dialog-descanso" aria-labelledby="titulo-descanso">
+      <form onsubmit="concluirDescansoNaFicha(event)">
+        <h2 class="box-title" id="titulo-descanso">Descanso</h2>
+        <label class="descanso-tipo">Tipo de descanso
+          <select class="spell-meta-input" name="tipo" onchange="atualizarOpcoesDescanso()">
+            <option value="curto">Curto</option>
+            <option value="longo">Longo</option>
+          </select>
+        </label>
+        <p class="descanso-info"></p>
+        <button type="button" class="add-row-btn" id="gastar-dado-vida" onclick="gastarDadoDeVidaNaFicha()">Rolar 1 dado de vida</button>
+        <p class="descanso-resultado" role="status"></p>
+        <div class="ficha-dialog-acoes">
+          <button type="button" class="add-row-btn" onclick="this.closest('dialog').close()">Fechar</button>
+          <button type="submit" class="add-row-btn">Concluir descanso</button>
+        </div>
+      </form>
+    </dialog>
 
     <div class="box">
       <div class="box-title">Proficiências &amp; Idiomas</div>
@@ -836,6 +802,7 @@ function atualizarCampoSimples(campo, valor) {
 function atualizarNivel(valor) {
   const n = Math.min(Math.max(parseInt(valor) || 1, 1), 20);
   PERSONAGEM.dados.level = n;
+  PERSONAGEM.dados.hitDiceUsados = dadosDeVida(PERSONAGEM.dados).usados;
   recalcularSlotsAutomaticos();
   agendarSalvar();
   renderPrincipal(); // bônus de proficiência e HD máximos dependem do nível
@@ -850,13 +817,148 @@ function atualizarAttr(attrId, valor) {
 }
 
 function atualizarHP(campo, valor) {
-  const v = parseInt(valor);
-  PERSONAGEM.dados.hp[campo] = isNaN(v) ? 0 : v;
-  agendarSalvar();
-  // só atualiza a barra sem re-renderizar tudo, pra não perder o foco do input
   const d = PERSONAGEM.dados;
+  const v = Number(valor);
+  if (!valor.trim() || !Number.isSafeInteger(v)) {
+    sincronizarControlesPV();
+    return;
+  }
+  const hp = campo === 'max'
+    ? ajustarPvMaximos(d.hp, Math.max(1, v))
+    : normalizarPontosVida({ ...d.hp, [campo]: v });
+  PERSONAGEM.dados = atualizarPontosVida(d, hp);
+  agendarSalvar();
+  sincronizarControlesPV();
+}
+
+function sincronizarControlesPV() {
+  const { hp, hitDiceUsados, deathSaves } = PERSONAGEM.dados;
+  const atual = document.getElementById('pv-atual');
+  atual.max = hp.max;
+  atual.value = hp.atual;
+  document.getElementById('pv-max').value = hp.max;
+  document.getElementById('pv-temp').value = hp.temp;
+  document.getElementById('dados-vida-usados').value = hitDiceUsados;
   const track = document.querySelector('.hp-bar-fill');
-  if (track) track.style.width = Math.max(0,Math.min(100,(d.hp.atual/(d.hp.max||1))*100)) + '%';
+  track.style.width = (hp.atual / hp.max * 100) + '%';
+  for (const [classe, tipo] of [['success', 'sucesso'], ['fail', 'falha']]) {
+    document.querySelectorAll('.death-save-dot.' + classe).forEach((dot, indice) => {
+      dot.classList.toggle('filled', indice < deathSaves[tipo]);
+    });
+  }
+}
+
+function atualizarDadosDeVida(input) {
+  const d = PERSONAGEM.dados;
+  const { usados } = dadosDeVida({ ...d, hitDiceUsados: input.value });
+  d.hitDiceUsados = usados;
+  input.value = usados;
+  agendarSalvar();
+}
+
+function aplicarAjustePV(evento) {
+  evento.preventDefault();
+  const form = evento.currentTarget;
+  const pontos = Number(form.elements.pontos.value);
+  if (!Number.isSafeInteger(pontos) || pontos < 1) return;
+  const d = PERSONAGEM.dados;
+  let hp, mensagem;
+  switch (form.elements.efeito.value) {
+    case 'dano': {
+      const dano = aplicarDano(d.hp, pontos);
+      hp = dano.hp;
+      mensagem = `Dano: ${dano.pvPerdidos} PV e ${dano.temporariosPerdidos} PV temporários perdidos.`;
+      if (hp.atual === 0) {
+        const excesso = pontos - dano.pvPerdidos - dano.temporariosPerdidos;
+        mensagem += excesso >= hp.max ? ' Dano excedente suficiente para morte instantânea.' : ' A 0 PV, confira os testes de morte.';
+        if (d.concentracao) mensagem += ' Se ficou inconsciente, encerre a concentração.';
+      } else if (d.concentracao) {
+        mensagem += ` Faça um teste de Constituição (CD ${Math.max(10, Math.floor(pontos / 2))}) para manter a concentração.`;
+      }
+      break;
+    }
+    case 'cura': {
+      const cura = curar(d.hp, pontos);
+      hp = cura.hp;
+      mensagem = `PV recuperados: ${cura.recuperados}.`;
+      break;
+    }
+    case 'temporarios':
+      hp = receberPvTemporarios(d.hp, pontos);
+      mensagem = pontos < d.hp.temp ? `Mantidos os ${hp.temp} PV temporários que você já tinha.` : `PV temporários: ${hp.temp}.`;
+      break;
+    default:
+      return;
+  }
+  PERSONAGEM.dados = atualizarPontosVida(d, hp);
+  form.closest('dialog').close();
+  agendarSalvar();
+  renderPrincipal();
+  showToast(mensagem);
+}
+
+function abrirDescanso() {
+  const dialogo = document.getElementById('dialog-descanso');
+  dialogo.querySelector('form').reset();
+  dialogo.querySelector('.descanso-resultado').textContent = '';
+  atualizarOpcoesDescanso();
+  dialogo.showModal();
+}
+
+function atualizarOpcoesDescanso() {
+  const d = PERSONAGEM.dados;
+  const dialogo = document.getElementById('dialog-descanso');
+  const form = dialogo.querySelector('form');
+  const longo = form.elements.tipo.value === 'longo';
+  const { total, lados, disponiveis } = dadosDeVida(d);
+  const rolar = dialogo.querySelector('#gastar-dado-vida');
+  rolar.hidden = longo;
+  rolar.disabled = !lados || !disponiveis;
+  dialogo.querySelector('.descanso-resultado').hidden = longo;
+  form.querySelector('[type="submit"]').disabled = longo && d.hp.atual === 0;
+  const info = dialogo.querySelector('.descanso-info');
+  if (longo) {
+    info.textContent = d.hp.atual === 0
+      ? 'É preciso começar o descanso com pelo menos 1 PV.'
+      : `Restaura PV e espaços de magia, encerra os PV temporários e recupera até ${Math.max(1, Math.floor(total / 2))} dos dados de vida gastos.`;
+  } else if (!lados) {
+    info.textContent = 'Escolha a classe na ficha para rolar dados de vida.';
+  } else {
+    info.textContent = `${disponiveis} de ${total} dados disponíveis (d${lados}).`;
+  }
+}
+
+function gastarDadoDeVidaNaFicha() {
+  const d = PERSONAGEM.dados;
+  const modificador = mod(d.attrs.con);
+  const resultado = gastarDadoDeVida(d, modificador);
+  PERSONAGEM.dados = resultado.ficha;
+  agendarSalvar();
+  sincronizarControlesPV();
+  atualizarOpcoesDescanso();
+  document.querySelector('.descanso-resultado').textContent =
+    `d${resultado.lados}: ${resultado.dado} (${fmtMod(modificador)} CON). PV recuperados: ${resultado.recuperados}.`;
+}
+
+function concluirDescansoNaFicha(evento) {
+  evento.preventDefault();
+  const form = evento.currentTarget;
+  if (form.querySelector('[type="submit"]').disabled) return;
+  const anterior = PERSONAGEM.dados;
+  const longo = form.elements.tipo.value === 'longo';
+  const dados = longo ? concluirDescansoLongo(anterior) : concluirDescansoCurto(anterior);
+  PERSONAGEM.dados = dados;
+  form.closest('dialog').close();
+  agendarSalvar();
+  renderPrincipal();
+  renderCombate();
+  if (longo) {
+    showToast(`Descanso longo: PV e espaços restaurados. Dados de vida recuperados: ${anterior.hitDiceUsados - dados.hitDiceUsados}.`);
+  } else {
+    showToast(dados.spellSlots === anterior.spellSlots
+      ? 'Descanso curto concluído.'
+      : 'Descanso curto: espaços de Magia de Pacto recuperados.');
+  }
 }
 
 function setDeathSave(tipo, valor) {
@@ -931,8 +1033,7 @@ function renderPericias() {
       <span style="font-family:'Cinzel',serif;font-size:12px;text-align:right;
         color:${proficiente ? 'var(--gold)' : 'var(--parchment-dark)'};
         opacity:${proficiente ? '1' : '0.6'}">${modStr}</span>
-      <button class="d20-btn" title="Rolar teste de ${p.nome} (1d20${modStr})"
-        onclick="rolarD20('${p.nome}', ${valor})">${D20_SVG}</button>
+      ${botaoRolagemD20(p.nome, valor, `Rolar teste de ${p.nome}`)}
     </div>`;
   }
 
@@ -952,8 +1053,7 @@ function renderPericias() {
         onchange="toggleProfSave('${a.id}'); renderPericias();">
       <span class="skill-name" style="font-size:12.5px">${a.nome}</span>
       <span style="font-family:'Cinzel',serif;font-size:12px;text-align:right;color:var(--gold)">${modStr}</span>
-      <button class="d20-btn" title="Rolar salvaguarda de ${a.nome} (1d20${modStr})"
-        onclick="rolarD20('Salv. ${a.nome}', ${valor})">${D20_SVG}</button>
+      ${botaoRolagemD20(`Salvaguarda de ${a.nome}`, valor, `Rolar salvaguarda de ${a.nome}`)}
     </div>`;
   }
 
@@ -1215,12 +1315,10 @@ function renderCombate() {
 
   // garante lista de ataques estruturados e slots de magia (níveis 0-9)
   if (!d.ataquesList) d.ataquesList = [];
-  const slotsAindaNaoExistiam = !d.spellSlots || Object.keys(d.spellSlots).length === 0;
+  const maximos = calcularSpellSlots(d.cls, d.level);
   for (let n = 0; n <= 9; n++) {
-    if (!d.spellSlots[n]) d.spellSlots[n] = { max: 0, usados: 0 };
+    d.spellSlots[n] ??= { max: maximos[n], usados: 0 };
   }
-  // primeira vez que essa aba é aberta: calcula slots automaticamente
-  if (slotsAindaNaoExistiam) recalcularSlotsAutomaticos();
 
   if (!d.spellSlotsManual) d.spellSlotsManual = {};
 
@@ -1280,13 +1378,12 @@ function renderCombate() {
     <div class="box" style="margin-bottom:18px">
       <div class="box-title">Espaços de Magia por Nível</div>
       <div class="spell-slots-row">
-        ${[0,1,2,3,4,5,6,7,8,9].map(n => {
-          const conhecidas = (d.spells || []).filter(s => s.nivel === n).length;
-          return spellSlotLvlHTML(n, d.spellSlots[n] || {max:0,usados:0}, !!(d.spellSlotsManual && d.spellSlotsManual[n]), conhecidas);
-        }).join('')}
+        ${[0,1,2,3,4,5,6,7,8,9].map(n => spellSlotLvlHTML(
+          n, d.spellSlots[n], d.spellSlotsManual[n], magiasPorNivel[n]?.length ?? 0
+        )).join('')}
       </div>
       <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:11px;color:var(--parchment-dark);opacity:0.5;margin-top:8px">
-        Nível 0 = truques conhecidos (não são consumidos). Valores calculados automaticamente pela classe e nível.
+        Truques não gastam espaço. Os máximos são calculados pela classe e pelo nível.
       </div>
     </div>
 
@@ -1303,7 +1400,27 @@ function renderCombate() {
       ${spellGroupHTML(0, 'Truques (Nível 0)', magiasPorNivel[0])}
       ${[1,2,3,4,5,6,7,8,9].map(n => niveisComMagia.includes(n) ? spellGroupHTML(n, `Nível ${n}`, magiasPorNivel[n]) : '').join('')}
       ${d.spells.length === 0 ? `<div style="font-family:'EB Garamond',serif;font-style:italic;color:var(--parchment-dark);opacity:0.4;font-size:13px;padding:8px 2px">Nenhuma magia adicionada ainda. Abra o Grimório para aprender magias da sua classe.</div>` : ''}
+      ${d.concentracao ? `<div class="spell-concentration">
+        <span>Concentração: <strong>${esc(d.concentracao.nome)}</strong></span>
+        <button type="button" class="add-row-btn spell-cast-btn" onclick="encerrarConcentracao()">Encerrar</button>
+      </div>` : ''}
     </div>
+
+    <dialog class="box ficha-dialog" id="spell-cast-dialog" aria-labelledby="spell-cast-title">
+      <form onsubmit="conjurarNaFicha(event)">
+        <h2 class="box-title" id="spell-cast-title">Conjurar magia</h2>
+        <input type="hidden" name="indice">
+        <p class="spell-cast-message"></p>
+        <label class="spell-cast-slot">Espaço para conjurar
+          <select name="espaco" class="spell-meta-input"></select>
+        </label>
+        <label class="spell-cast-concentration"><input type="checkbox" name="concentracao"> Exige concentração</label>
+        <div class="ficha-dialog-acoes">
+          <button type="button" class="add-row-btn" onclick="this.closest('dialog').close()">Cancelar</button>
+          <button type="submit" class="add-row-btn">Confirmar</button>
+        </div>
+      </form>
+    </dialog>
   `;
 }
 
@@ -1331,7 +1448,6 @@ function atualizarAtaque(i, campo, valor) {
 function spellSlotLvlHTML(nivel, slot, isManual, conhecidas) {
   const max = slot.max || 0;
   const isTruque = nivel === 0;
-  const noLimite = !isTruque && max > 0 && conhecidas >= max;
   return `
   <div class="spell-slot-lvl">
     <div class="spell-slot-lvl-head">
@@ -1347,22 +1463,27 @@ function spellSlotLvlHTML(nivel, slot, isManual, conhecidas) {
       ${isTruque
         ? ''
         : Array.from({length: Math.max(max,1)}).map((_, i) => max === 0 ? '' : `
-          <div class="spell-slot-dot ${i < slot.usados ? 'used' : ''}" onclick="toggleSpellSlot(${nivel}, ${i+1})"></div>
+          <button type="button" class="spell-slot-dot ${i < slot.usados ? 'used' : ''}"
+            aria-label="Espaço ${i+1} de nível ${nivel}" aria-pressed="${i < slot.usados}"
+            onclick="toggleSpellSlot(${nivel}, ${i+1})"></button>
         `).join('')
       }
     </div>
 
-    ${max > 0 ? `<span class="spell-known-count ${noLimite ? 'full' : ''}" title="Magias ${isTruque ? '(truques)' : 'de nível ' + nivel} aprendidas neste nível, de um máximo de ${max}">${conhecidas}/${max} conhecidas</span>` : ''}
+    ${isTruque
+      ? `<span class="spell-known-count">${conhecidas} na lista</span>`
+      : `<span class="spell-known-count">${Math.max(0, max - (slot.usados || 0))}/${max} livres</span>`}
   </div>`;
 }
 
-// spellKnownLvlHTML e atualizarSpellsKnownMax foram removidos (BUG 2):
-// o limite de magias/truques conhecidos agora vem de spellSlots[nivel].max,
-// calculado automaticamente por calcularSpellSlots() ao trocar classe/nível.
-
-function abrirGrimorio() {
-  // Salva imediatamente antes de abrir, para o iframe ler os dados mais recentes
-  if (_saveTimeout) salvarAgora();
+async function abrirGrimorio() {
+  while (_saveTimeout !== null || _saveEmAndamento) {
+    const envio = _saveTimeout !== null ? salvarAgora() : _saveEmAndamento;
+    if (!(await envio)) return;
+  }
+  const consulta = new URLSearchParams({ id: CHAR_ID });
+  if (repositorio.idExemplo) consulta.set('preview', '1');
+  const url = 'livros/grimorio.html?' + consulta;
 
   // Reutiliza o overlay se já existir
   let overlay = document.getElementById('grimorio-overlay');
@@ -1386,7 +1507,8 @@ function abrirGrimorio() {
       'border:none', 'border-radius:0',
       'background:transparent'
     ].join(';');
-    iframe.src = 'livros/grimorio.html?id=' + encodeURIComponent(CHAR_ID);
+    iframe.src = url;
+    iframe.title = 'Grimório';
 
     overlay.appendChild(iframe);
     document.body.appendChild(overlay);
@@ -1398,7 +1520,7 @@ function abrirGrimorio() {
   } else {
     // Já existe: atualiza o src para recarregar com dados frescos
     const iframe = document.getElementById('grimorio-iframe');
-    if (iframe) iframe.src = 'livros/grimorio.html?id=' + encodeURIComponent(CHAR_ID);
+    if (iframe) iframe.src = url;
     overlay.style.display = 'flex';
   }
 }
@@ -1407,18 +1529,11 @@ async function fecharGrimorio() {
   const overlay = document.getElementById('grimorio-overlay');
   if (overlay) overlay.style.display = 'none';
 
-  // Relê dados do Supabase (o grimório pode ter adicionado magias
-  // em sua própria aba/iframe) e re-renderiza a aba Combate para
-  // refletir as mudanças imediatamente.
-  const { data, error } = await sb
-    .from('personagens')
-    .select('*')
-    .eq('id', CHAR_ID)
-    .single();
+  // O grimório pode ter adicionado magias. Preserve o restante da ficha aberta.
+  const { data, error } = await repositorio.carregar(CHAR_ID);
 
   if (!error && data) {
-    PERSONAGEM = data;
-    PERSONAGEM.dados = mesclarComDefault(data.dados || {});
+    PERSONAGEM.dados.spells = normalizarMagias(data.dados?.spells);
   }
   renderCombate();
 }
@@ -1432,13 +1547,16 @@ function toggleSpellSlot(nivel, posicao) {
 
 function atualizarSlotMax(nivel, valor) {
   const max = Math.max(0, Math.min(9, parseInt(valor)||0));
-  const slot = PERSONAGEM.dados.spellSlots[nivel];
-  slot.max = max;
-  if (slot.usados > max) slot.usados = max;
+  const d = PERSONAGEM.dados;
+  if (nivel === 0) {
+    d.spellSlots[0] = { max, usados: 0 };
+  } else {
+    d.spellSlots = configurarEspaco(d.spellSlots, nivel, max);
+  }
   // marca esse nível como ajustado manualmente: o recálculo automático
   // (ao trocar classe/nível) não vai mais sobrescrever esse valor
-  if (!PERSONAGEM.dados.spellSlotsManual) PERSONAGEM.dados.spellSlotsManual = {};
-  PERSONAGEM.dados.spellSlotsManual[nivel] = true;
+  if (!d.spellSlotsManual) d.spellSlotsManual = {};
+  d.spellSlotsManual[nivel] = true;
   agendarSalvar();
   renderCombate();
 }
@@ -1455,23 +1573,27 @@ function spellGroupHTML(nivel, titulo, lista) {
     if (nivel !== 0) return '';
     lista = [];
   }
-  const max = (PERSONAGEM.dados.spellSlots && PERSONAGEM.dados.spellSlots[nivel] && PERSONAGEM.dados.spellSlots[nivel].max) || 0;
+  const prepara = precisaPrepararMagia(PERSONAGEM.dados, nivel);
   const preparadas = lista.filter(sp => sp.preparada).length;
-  const mostraContador = nivel !== 0 && max > 0;
   return `
   <div class="spell-group">
     <div class="spell-group-title">
       ${titulo}
-      ${mostraContador ? `<span class="spell-group-prep-count ${preparadas>=max?'full':''}">${preparadas}/${max} preparadas</span>` : ''}
+      <span class="spell-group-prep-count">${lista.length} na lista${prepara ? ` · ${preparadas} preparadas` : ''}</span>
     </div>
     ${lista.map(sp => `
-      <div class="spell-row" style="grid-template-columns:24px 1fr 70px 90px 26px">
-        <input type="checkbox" class="spell-prep" ${sp.preparada?'checked':''} title="${sp.nivel===0?'Truques sempre disponíveis':'Preparada (consome espaço de magia)'}" onchange="toggleMagiaPreparada(${sp._i})">
+      <div class="spell-row spell-row-ficha">
+        ${prepara
+          ? `<input type="checkbox" class="spell-prep" ${sp.preparada?'checked':''}
+              aria-label="Preparar ${esc(sp.nome || 'magia')}" title="Preparar magia"
+              onchange="toggleMagiaPreparada(${sp._i})">`
+          : '<span aria-hidden="true"></span>'}
         <input class="spell-name-input" value="${esc(sp.nome)}" placeholder="Nome da magia" oninput="atualizarMagiaCampo(${sp._i}, 'nome', this.value)">
         <select class="spell-meta-input" onchange="atualizarMagiaNivel(${sp._i}, this.value)">
           ${[0,1,2,3,4,5,6,7,8,9].map(n => `<option value="${n}" ${sp.nivel===n?'selected':''}>${n===0?'Truque':'Nv '+n}</option>`).join('')}
         </select>
         <input class="spell-meta-input" value="${esc(sp.escola||'')}" placeholder="escola/efeito" oninput="atualizarMagiaCampo(${sp._i}, 'escola', this.value)">
+        <button type="button" class="add-row-btn spell-cast-btn" onclick="abrirConjuracao(${sp._i})">Conjurar</button>
         <button class="spell-del-btn" onclick="removerMagia(${sp._i})">✕</button>
       </div>
     `).join('')}
@@ -1507,34 +1629,76 @@ function atualizarMagiaCampo(i, campo, valor) {
 
 function toggleMagiaPreparada(i) {
   const sp = PERSONAGEM.dados.spells[i];
-  if (!sp) return;
+  if (!sp || !precisaPrepararMagia(PERSONAGEM.dados, sp.nivel)) return;
+  sp.preparada = !sp.preparada;
+  agendarSalvar();
+  renderCombate();
+}
 
-  // Truques (nível 0) nunca consomem espaço de magia — sempre pode preparar/usar livremente.
-  if (sp.nivel === 0) {
-    sp.preparada = !sp.preparada;
-    agendarSalvar();
+function abrirConjuracao(indice) {
+  const d = PERSONAGEM.dados;
+  const magia = d.spells[indice];
+  if (!magia?.nome?.trim()) {
+    showToast('Dê um nome à magia antes de conjurar.', 'warning');
     return;
   }
+  const dialogo = document.getElementById('spell-cast-dialog');
+  const form = dialogo.querySelector('form');
+  const espacos = magia.nivel > 0 ? espacosDisponiveis(d.spellSlots, magia.nivel) : [];
+  const precisaPreparar = precisaPrepararMagia(d, magia.nivel) && !magia.preparada;
+  const podeConjurar = !precisaPreparar && (magia.nivel === 0 || espacos.length > 0);
+  const seletor = form.elements.espaco;
 
-  // Vai marcar como preparada agora: checa se ainda há espaço de magia disponível
-  // naquele nível (quantas OUTRAS magias do mesmo nível já estão preparadas).
-  if (!sp.preparada) {
-    const max = (PERSONAGEM.dados.spellSlots && PERSONAGEM.dados.spellSlots[sp.nivel] && PERSONAGEM.dados.spellSlots[sp.nivel].max) || 0;
-    const jaPreparadas = PERSONAGEM.dados.spells.filter(s => s.nivel === sp.nivel && s.preparada).length;
-
-    if (max === 0) {
-      showToast(`Seu personagem não tem espaços de magia de nível ${sp.nivel} ainda.`, 'warning');
-      renderCombate(); // garante que o checkbox volte ao estado desmarcado visualmente
-      return;
-    }
-    if (jaPreparadas >= max) {
-      showToast(`Limite de magias de nível ${sp.nivel} preparadas atingido (${jaPreparadas}/${max}). Desmarque outra antes de preparar esta.`, 'warning');
-      renderCombate();
-      return;
-    }
+  form.elements.indice.value = indice;
+  dialogo.querySelector('h2').textContent = magia.nome;
+  const mensagem = dialogo.querySelector('.spell-cast-message');
+  mensagem.textContent = '';
+  if (precisaPreparar) mensagem.textContent = 'Prepare esta magia antes de conjurar.';
+  else if (magia.nivel === 0) mensagem.textContent = 'Este truque não gasta espaço.';
+  else if (!espacos.length) mensagem.textContent = 'Nenhum espaço disponível para esta magia.';
+  if (podeConjurar && d.concentracao) {
+    mensagem.textContent += ` Se a magia exigir concentração, ela substitui ${d.concentracao.nome}.`;
   }
+  mensagem.hidden = !mensagem.textContent;
+  seletor.closest('label').hidden = !podeConjurar || magia.nivel === 0;
+  seletor.innerHTML = espacos.map(({ nivel, restantes }) =>
+    `<option value="${nivel}">Nível ${nivel} (${restantes} livre${restantes === 1 ? '' : 's'})</option>`
+  ).join('');
+  form.elements.concentracao.checked = magia.concentracao === true;
+  form.elements.concentracao.closest('label').hidden = !podeConjurar;
+  form.querySelector('[type="submit"]').disabled = !podeConjurar;
+  dialogo.showModal();
+}
 
-  sp.preparada = !sp.preparada;
+function conjurarNaFicha(evento) {
+  evento.preventDefault();
+  const form = evento.currentTarget;
+  if (form.querySelector('[type="submit"]').disabled) return;
+  const indice = Number(form.elements.indice.value);
+  const magia = PERSONAGEM.dados.spells[indice];
+  const nivel = Number(form.elements.espaco.value);
+  if (!magia?.nome?.trim()) return;
+  try {
+    const conjurada = { ...magia, concentracao: form.elements.concentracao.checked };
+    const dados = conjurarMagia(PERSONAGEM.dados, conjurada, nivel);
+    dados.spells = dados.spells.map((item, i) => i === indice ? conjurada : item);
+    PERSONAGEM.dados = dados;
+  } catch (erro) {
+    const mensagem = form.querySelector('.spell-cast-message');
+    mensagem.textContent = erro.message;
+    mensagem.hidden = false;
+    return;
+  }
+  form.closest('dialog').close();
+  agendarSalvar();
+  renderCombate();
+  showToast(magia.nivel === 0
+    ? `${esc(magia.nome)} · truque conjurado.`
+    : `${esc(magia.nome)} · espaço de nível ${nivel} gasto.`);
+}
+
+function encerrarConcentracao() {
+  PERSONAGEM.dados.concentracao = null;
   agendarSalvar();
   renderCombate();
 }
@@ -1651,44 +1815,49 @@ function switchTab(id) {
 // AUTOSAVE
 // =============================================================
 let _saveTimeout = null;
+let _saveEmAndamento = null;
 
 function agendarSalvar() {
-  clearInterval(_saveTimeout);
   clearTimeout(_saveTimeout);
   _saveTimeout = setTimeout(salvarAgora, 450);
 }
 
-async function salvarAgora() {
-  if (!PERSONAGEM || !sb) return;
+function salvarAgora() {
+  clearTimeout(_saveTimeout);
+  _saveTimeout = null;
+  if (!PERSONAGEM || !repositorio) return Promise.resolve(false);
   // sincroniza nome (input do topo) de volta pro objeto raiz, já que home-screen usa p.nome
   const nomeInput = document.getElementById('f_nome');
   if (nomeInput) PERSONAGEM.nome = nomeInput.value.trim() || PERSONAGEM.nome;
 
-  // Login é exigido só na hora de salvar de fato (mesmo padrão
-  // "lazy" usado no resto do app) — evita pedir login só pra
-  // visualizar uma ficha que talvez já esteja acessível via RLS
-  // (ex: outro jogador da campanha vendo a ficha).
-  const sessao = await exigirLogin('Faça login para salvar as alterações no seu personagem.');
-  if (!sessao) return; // cancelou o login — não perde os dados em tela, só não persiste agora
+  const campos = {
+    nome: PERSONAGEM.nome,
+    dados: structuredClone(PERSONAGEM.dados)
+  };
+  const enviar = () => persistirFicha(CHAR_ID, campos);
+  const operacao = (_saveEmAndamento ? _saveEmAndamento.then(enviar) : enviar()).finally(() => {
+    if (_saveEmAndamento === operacao) _saveEmAndamento = null;
+  });
+  _saveEmAndamento = operacao;
+  return operacao;
+}
 
-  const { error } = await sb
-    .from('personagens')
-    .update({
-      nome: PERSONAGEM.nome,
-      dados: PERSONAGEM.dados
-    })
-    .eq('id', CHAR_ID);
-
-  if (error) {
+async function persistirFicha(id, campos) {
+  try {
+    const { error, cancelado } = await repositorio.salvar(id, campos, { exigirSessao: true });
+    if (cancelado) return false;
+    if (error) throw error;
+  } catch (error) {
     console.error('[ficha-dnd] erro ao salvar personagem:', error.message);
-    showToast('Erro ao salvar — tente novamente.', 'warning');
+    showToast('Não foi possível salvar a ficha. Confira seu acesso ou tente novamente.', 'warning');
     avisarShell('ficha:erro-salvo');
-    return;
+    return false;
   }
 
-  avisarShell('ficha:titulo', PERSONAGEM.nome);
+  avisarShell('ficha:titulo', campos.nome);
   avisarShell('ficha:salvo');
   mostrarIndicadorSalvo();
+  return true;
 }
 
 function mostrarIndicadorSalvo() {
@@ -1728,6 +1897,30 @@ function montarEstruturaAbas() {
     <section class="sheet-panel" id="panel-inventario"></section>
     <section class="sheet-panel" id="panel-biografia"></section>
     <section class="sheet-panel" id="panel-notas"></section>
+    <dialog class="box ficha-dialog" id="dialog-rolagem-d20" aria-labelledby="titulo-rolagem-d20">
+      <form onsubmit="confirmarRolagemD20(event)">
+        <h2 class="box-title" id="titulo-rolagem-d20">Rolar d20</h2>
+        <p class="roll-modificador"></p>
+        <input type="hidden" name="modificador">
+        <div class="roll-campos">
+          <label>Tipo de rolagem
+            <select class="spell-meta-input" name="modo">
+              <option value="normal">Normal</option>
+              <option value="vantagem">Vantagem</option>
+              <option value="desvantagem">Desvantagem</option>
+            </select>
+          </label>
+          <label>CD (opcional)
+            <input class="spell-meta-input" name="cd" type="number" min="1" max="${Number.MAX_SAFE_INTEGER}">
+          </label>
+        </div>
+        <div class="roll-resultado" role="status" aria-atomic="true"></div>
+        <div class="ficha-dialog-acoes">
+          <button type="button" class="add-row-btn" onclick="this.closest('dialog').close()">Fechar</button>
+          <button type="submit" class="add-row-btn">Rolar d20</button>
+        </div>
+      </form>
+    </dialog>
   `;
 }
 
@@ -1752,7 +1945,7 @@ async function init() {
     if (tabs) tabs.classList.add('sheet-tabs--no-topbar');
   }
 
-  sb = await obterClienteSupabase();
+  repositorio = await abrirRepositorioFicha(window.parent);
 
   if (!(await carregarPersonagem())) return;
 
@@ -1793,11 +1986,18 @@ window.atualizarAttr = atualizarAttr;
 window.atualizarNivel = atualizarNivel;
 window.toggleOverride = toggleOverride;
 window.overrideManualDireto = overrideManualDireto;
-window.rolarD20 = rolarD20;
+window.abrirRolagemD20 = abrirRolagemD20;
+window.confirmarRolagemD20 = confirmarRolagemD20;
 window.setDeathSave = setDeathSave;
 window.toggleProfSave = toggleProfSave;
 window.toggleProfSkill = toggleProfSkill;
 window.atualizarHP = atualizarHP;
+window.atualizarDadosDeVida = atualizarDadosDeVida;
+window.aplicarAjustePV = aplicarAjustePV;
+window.abrirDescanso = abrirDescanso;
+window.atualizarOpcoesDescanso = atualizarOpcoesDescanso;
+window.gastarDadoDeVidaNaFicha = gastarDadoDeVidaNaFicha;
+window.concluirDescansoNaFicha = concluirDescansoNaFicha;
 window.atualizarSlotMax = atualizarSlotMax;
 window.toggleSpellSlot = toggleSpellSlot;
 window.restaurarSlotAutomatico = restaurarSlotAutomatico;
@@ -1821,6 +2021,9 @@ window.adicionarMagia = adicionarMagia;
 window.atualizarMagiaCampo = atualizarMagiaCampo;
 window.atualizarMagiaNivel = atualizarMagiaNivel;
 window.toggleMagiaPreparada = toggleMagiaPreparada;
+window.abrirConjuracao = abrirConjuracao;
+window.conjurarNaFicha = conjurarNaFicha;
+window.encerrarConcentracao = encerrarConcentracao;
 window.removerMagia = removerMagia;
 
 init();

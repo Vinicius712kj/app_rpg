@@ -2366,6 +2366,7 @@ function atualizarMoeda(tipo, val) {
 function renderBiografia() {
   const d = PERSONAGEM.dados;
   const bio = d.bio || {};
+  const foto = d._foto || PERSONAGEM.foto || bio.foto;
 
   document.getElementById('panel-biografia').innerHTML = `
     <div class="stack">
@@ -2399,14 +2400,14 @@ function renderBiografia() {
           <div style="flex-shrink:0">
             <div class="img-upload-area" style="width:140px;height:140px;border-radius:50%;cursor:pointer"
               onclick="document.getElementById('bio_foto_input').click()">
-              <img id="bio_foto_preview" src="${esc(PERSONAGEM.foto||bio.foto||'')}" alt=""
-                style="display:${(PERSONAGEM.foto||bio.foto)?'block':'none'};width:100%;height:100%;object-fit:cover;border-radius:50%;">
-              <div id="bio_foto_placeholder" class="img-upload-placeholder" style="display:${(PERSONAGEM.foto||bio.foto)?'none':'flex'}">
+              <img id="bio_foto_preview" ${foto ? `src="${esc(foto)}"` : ''} alt="Foto do personagem"
+                style="display:${foto ? 'block' : 'none'};width:100%;height:100%;object-fit:cover;border-radius:50%;">
+              <div id="bio_foto_placeholder" class="img-upload-placeholder" style="display:${foto ? 'none' : 'flex'}">
                 <span style="font-size:1.8em;opacity:0.3">✦</span>
                 <span style="opacity:0.4;font-size:0.7em;text-align:center">Foto do<br>personagem</span>
               </div>
             </div>
-            <input type="file" id="bio_foto_input" accept="image/*" style="display:none"
+            <input type="file" id="bio_foto_input" accept="image/*" style="display:none" ${MODO_SOMENTE_LEITURA ? 'disabled' : ''}
               onchange="trocarFotoPersonagem(this)">
           </div>
           <div style="flex:1">
@@ -2460,6 +2461,7 @@ function atualizarBio(campo, val) {
 }
 
 function trocarFotoPersonagem(input) {
+  if (MODO_SOMENTE_LEITURA) return;
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -2474,7 +2476,7 @@ function trocarFotoPersonagem(input) {
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img,0,0,w,h);
       const b64 = canvas.toDataURL('image/jpeg', 0.82);
-      PERSONAGEM.foto = b64;
+      PERSONAGEM.dados._foto = b64;
       const prev = document.getElementById('bio_foto_preview');
       const ph = document.getElementById('bio_foto_placeholder');
       if (prev) { prev.src = b64; prev.style.display = 'block'; }
@@ -2644,13 +2646,13 @@ async function salvarAgora() {
       return;
     }
 
-    const { error } = await sb
+    const { data, error } = await sb
       .from('personagens')
       .update({ nome: PERSONAGEM.nome, dados: PERSONAGEM.dados })
-      .eq('id', CHAR_ID);
-    if (error) {
-      console.error('[etherion-ficha] erro ao salvar no Supabase:', error.message);
-      erroSalvar = error;
+      .eq('id', CHAR_ID).eq('dono_id', user.id).select('id').maybeSingle();
+    if (error || !data) {
+      erroSalvar = error ?? new Error('Ficha não encontrada ou sem permissão para editar.');
+      console.error('[etherion-ficha] erro ao salvar no Supabase:', erroSalvar.message);
       // Fallback silencioso pro localStorage se o Supabase falhar
       const idx = PERSONAGENS.findIndex(x => x.id === CHAR_ID);
       if (idx >= 0) PERSONAGENS[idx] = PERSONAGEM;
@@ -2663,14 +2665,14 @@ async function salvarAgora() {
     saveData('forja_personagens', PERSONAGENS);
   }
 
-  mostrarIndicadorSalvo();
-
   // Avisa o shell (index.html) pra atualizar o indicador "✓ Salvo" /
   // "✗ Erro ao salvar" no topbar de modo ficha — ver listener de
   // 'message' em index.html.
   if (erroSalvar) {
+    showToast('Não foi possível salvar a ficha no banco. Tente novamente.', 'warning');
     window.parent.postMessage({ tipo: 'ficha:erro-salvo' }, window.location.origin);
   } else {
+    mostrarIndicadorSalvo();
     window.parent.postMessage({ tipo: 'ficha:salvo' }, window.location.origin);
   }
 }

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forja das Eras</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/forja-icons.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="core/css/home-screen.css">
 </head>
 <body>
@@ -35,16 +36,16 @@
 <!-- ===== PRIMARY NAV — MODO HUB (visível por padrão) ===== -->
 <nav class="primary-nav" id="topbar-hub">
   <button class="pnav-tab active" data-section="campanhas" onclick="switchSection('campanhas')">
-    ⚔ Campanhas <span class="pnav-count" id="count-campanhas">0</span>
+    <span class="ui-icon" data-icon="swords" aria-hidden="true"></span> Campanhas <span class="pnav-count" id="count-campanhas">0</span>
   </button>
   <button class="pnav-tab" data-section="personagens" onclick="switchSection('personagens')">
-    🧙 Personagens <span class="pnav-count" id="count-personagens">0</span>
+    <span class="ui-icon" data-icon="shield" aria-hidden="true"></span> Personagens <span class="pnav-count" id="count-personagens">0</span>
   </button>
   <button class="pnav-tab" data-section="sistemas" onclick="switchSection('sistemas')">
-    📖 Sistemas <span class="pnav-count" id="count-sistemas">0</span>
+    <span class="ui-icon" data-icon="layers" aria-hidden="true"></span> Sistemas <span class="pnav-count" id="count-sistemas">0</span>
   </button>
   <button class="pnav-tab" data-section="livros" onclick="switchSection('livros')">
-    📚 Livros <span class="pnav-count" id="count-livros">0</span>
+    <span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> Livros <span class="pnav-count" id="count-livros">0</span>
   </button>
 </nav>
 
@@ -64,8 +65,8 @@
         <div class="sec-desc">Cada campanha é ligada a um sistema e pode ter vários personagens.</div>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn-gold" onclick="openModal('modalCampanha')">⚔ Nova Campanha</button>
-        <button class="btn btn-ghost" onclick="abrirModalEntrarCampanha()">🔑 Entrar em Campanha</button>
+        <button class="btn-gold com-icone" onclick="openModal('modalCampanha')"><span class="ui-icon" data-icon="add" aria-hidden="true"></span> Nova campanha</button>
+        <button class="btn btn-ghost com-icone" onclick="abrirModalEntrarCampanha()"><span class="ui-icon" data-icon="key" aria-hidden="true"></span> Entrar em campanha</button>
       </div>
     </div>
 
@@ -85,7 +86,7 @@
         <div class="sec-title">Personagens</div>
         <div class="sec-desc">Personagens são globais — cada um carrega os dados do seu sistema.</div>
       </div>
-      <button class="btn-gold" onclick="openModal('modalPersonagem')">✦ Novo Personagem</button>
+      <button class="btn-gold com-icone" onclick="openModal('modalPersonagem')"><span class="ui-icon" data-icon="add" aria-hidden="true"></span> Novo personagem</button>
     </div>
 
     <div class="filter-row" id="charFilter">
@@ -103,7 +104,7 @@
         <div class="sec-title">Sistemas</div>
         <div class="sec-desc">Os sistemas disponíveis na plataforma. Cada um tem sua própria ficha.</div>
       </div>
-      <button class="btn-ghost" onclick="showToast('🔧 Sistemas personalizados em breve!', 'info')">+ Adicionar Sistema</button>
+      <button class="btn-ghost com-icone" onclick="showToast('Sistemas personalizados em breve.', 'info')"><span class="ui-icon" data-icon="add" aria-hidden="true"></span> Adicionar sistema</button>
     </div>
 
     <div class="sistemas-grid" id="sistemasGrid"></div>
@@ -136,8 +137,8 @@
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
     <div class="modal-header">
-      <span class="modal-title">⚔ NOVA CAMPANHA</span>
-      <button class="modal-close" onclick="closeModal('modalCampanha')">×</button>
+      <span class="modal-title"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span> Nova campanha</span>
+      <button class="modal-close" aria-label="Fechar" onclick="closeModal('modalCampanha')">×</button>
     </div>
     <div class="modal-body">
       <div style="display:flex; flex-direction:column; gap:16px;">
@@ -188,8 +189,8 @@
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
     <div class="modal-header">
-      <span class="modal-title">🔑 ENTRAR EM CAMPANHA</span>
-      <button class="modal-close" onclick="closeModal('modalEntrarCampanha')">×</button>
+      <span class="modal-title"><span class="ui-icon" data-icon="key" aria-hidden="true"></span> Entrar em campanha</span>
+      <button class="modal-close" aria-label="Fechar" onclick="closeModal('modalEntrarCampanha')">×</button>
     </div>
     <div class="modal-body">
       <div style="display:flex; flex-direction:column; gap:16px;">
@@ -230,24 +231,24 @@
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
     <div class="modal-header">
-      <span class="modal-title">🛡️ NOVO PERSONAGEM</span>
-      <button class="modal-close" onclick="closeModal('modalPersonagem')">×</button>
+      <span class="modal-title"><span class="ui-icon" data-icon="shield" aria-hidden="true"></span> Novo personagem</span>
+      <button class="modal-close" aria-label="Fechar" onclick="closeModal('modalPersonagem')">×</button>
     </div>
     <div class="modal-body">
       <div style="display:flex; flex-direction:column; gap:16px;">
         <div style="display:flex; gap:16px;">
           <div id="ch_photo_area" style="width:100px; height:100px; border-radius:50%; border:1px dashed rgba(201,168,76,0.3); cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; background:rgba(0,0,0,0.3); overflow:hidden;" onclick="document.getElementById('ch_photo_file').click()">
-            <span id="ch_photo_placeholder" style="font-size:24px; color:var(--parchment-dark); opacity:0.3;">👤</span>
-            <img id="ch_photo_preview" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; border:1px solid var(--gold);">
+            <span id="ch_photo_placeholder" class="ui-icon" data-icon="person" aria-hidden="true" style="--icon-size:24px; color:var(--parchment-dark); opacity:0.3;"></span>
+            <img id="ch_photo_preview" alt="Prévia da foto do personagem" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; border:1px solid var(--gold);">
             <input type="file" id="ch_photo_file" accept="image/*" style="display:none;" onchange="previewCharPhoto(event)">
           </div>
           <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
             <div class="form-group">
-              <label style="display:block; font-size:11px; letter-spacing:1px; color:var(--gold); margin-bottom:4px;">NOME DO PERSONAGEM</label>
+              <label for="ch_name" style="display:block; font-size:11px; letter-spacing:1px; color:var(--gold); margin-bottom:4px;">NOME DO PERSONAGEM</label>
               <input type="text" id="ch_name" class="form-input">
             </div>
             <div class="form-group">
-              <label style="display:block; font-size:11px; letter-spacing:1px; color:var(--gold); margin-bottom:4px;">SISTEMA</label>
+              <label for="ch_system" style="display:block; font-size:11px; letter-spacing:1px; color:var(--gold); margin-bottom:4px;">SISTEMA</label>
               <select id="ch_system" class="form-input">
                 <option value="">Selecione o Sistema...</option>
               </select>
@@ -268,8 +269,8 @@
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
     <div class="modal-header">
-      <span class="modal-title">⚠ APAGAR PERSONAGEM</span>
-      <button class="modal-close" onclick="cancelarDeletarPersonagem()">✕</button>
+      <span class="modal-title"><span class="ui-icon" data-icon="warning" aria-hidden="true"></span> Apagar personagem</span>
+      <button class="modal-close" aria-label="Fechar" onclick="cancelarDeletarPersonagem()">×</button>
     </div>
     <div class="modal-body">
       <p class="det-desc" style="text-align:center">
@@ -282,7 +283,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="cancelarDeletarPersonagem()">Cancelar</button>
-      <button class="btn btn-blood" onclick="executarDeletarPersonagem()">🗑 Apagar Definitivamente</button>
+      <button class="btn btn-blood com-icone" onclick="executarDeletarPersonagem()"><span class="ui-icon" data-icon="delete" aria-hidden="true"></span> Apagar definitivamente</button>
     </div>
   </div>
 </div>
@@ -290,8 +291,8 @@
 <div class="modal-backdrop" id="modalCropper">
   <div class="modal" style="max-width: 500px;">
     <div class="modal-header">
-      <span class="modal-title">📐 AJUSTAR IMAGEM</span>
-      <button class="modal-close" onclick="closeCropper()">×</button>
+      <span class="modal-title"><span class="ui-icon" data-icon="crop" aria-hidden="true"></span> Ajustar imagem</span>
+      <button class="modal-close" aria-label="Fechar" onclick="closeCropper()">×</button>
     </div>
     <div class="crop-modal-body" style="padding: 16px;">
       <div class="crop-container" id="cropContainer" onmousedown="startDragCrop(event)" onmousemove="dragCrop(event)" onmouseup="endDragCrop(event)" onmouseleave="endDragCrop(event)">
@@ -307,7 +308,7 @@
     </div>
     <div class="modal-footer" style="padding: 16px; display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid rgba(139,105,20,0.2);">
       <button class="btn btn-ghost" onclick="closeCropper()">Cancelar</button>
-      <button class="btn btn-gold" onclick="confirmCrop()">✂️ Recortar e Salvar</button>
+      <button class="btn btn-gold com-icone" onclick="confirmCrop()"><span class="ui-icon" data-icon="crop" aria-hidden="true"></span> Recortar e salvar</button>
     </div>
   </div>
 </div>
@@ -356,10 +357,10 @@ async function carregarDadosDoSupabase() {
   ]);
 
   console.log('[diag] resultado da busca: campanhas =', campanhas, 'erroCamp =', erroCamp);
-  console.log('[diag] resultado da busca: personagens =', personagens, 'erroPers =', erroPers);
+  console.log('[diag] personagens encontrados:', personagens?.length ?? 0);
 
-  if (erroCamp) { console.error('[forja] erro ao carregar campanhas:', erroCamp.message); showToast('⚠ Erro ao carregar campanhas', 'warning'); }
-  if (erroPers) { console.error('[forja] erro ao carregar personagens:', erroPers.message); showToast('⚠ Erro ao carregar personagens', 'warning'); }
+  if (erroCamp) { console.error('[forja] erro ao carregar campanhas:', erroCamp.message); showToast('Erro ao carregar campanhas', 'warning'); }
+  if (erroPers) { console.error('[forja] erro ao carregar personagens:', erroPers.message); showToast('Erro ao carregar personagens', 'warning'); }
 
   CAMPANHAS = (campanhas || []).map(mapearCampanhaSupabase);
   PERSONAGENS = (personagens || []).map(mapearPersonagemSupabase);
@@ -391,7 +392,7 @@ function mapearPersonagemSupabase(p) {
     nome: p.nome,
     sistema: p.sistema,
     dados: p.dados || {},
-    foto: (p.dados && p.dados._foto) || null,
+    foto: p.dados?._foto || p.dados?.bio?.foto || null,
     campanhaId: p.campanha_id,
     donoId: p.dono_id
   };
@@ -438,10 +439,14 @@ function progressaoDoChar(p, s) {
   };
 }
 
+function icone(nome, tamanho = '') {
+  return `<span class="ui-icon" data-icon="${nome}" aria-hidden="true"${tamanho ? ` style="--icon-size:${tamanho}"` : ''}></span>`;
+}
+
 function sysIcon(s, size = '1.4em') {
-  if (!s) return '✦';
+  if (!s) return icone('shield', size);
   if (s.img) return `<img src="${s.img}" alt="${s.nome}" style="width:${size};height:${size};object-fit:contain;display:inline-block;vertical-align:middle;">`;
-  return s.icon || '✦';
+  return icone('layers', size);
 }
 
 function sistemaBadge(id) {
@@ -472,7 +477,7 @@ function renderCampanhas() {
     <div class="camp-card fade-in" style="animation-delay:${i*0.06}s" onclick="abrirCampanha('${c.id}')">
       <div class="camp-card-top" style="${c.banner ? `background:url('${c.banner}') center/cover no-repeat` : `background:${s ? `linear-gradient(135deg, ${s.corBg}, rgba(0,0,0,0))` : ''}`}">
         ${c.banner ? `<div class="camp-banner-overlay"></div>` : ''}
-        <div class="camp-icon" style="position:relative;z-index:1">${s ? sysIcon(s,'2.2em') : '⚔'}</div>
+        <div class="camp-icon" style="position:relative;z-index:1">${s ? sysIcon(s,'2.2em') : icone('swords')}</div>
         <span class="camp-status ${st.cls}" style="position:relative;z-index:1">${st.label}</span>
       </div>
       <div class="camp-card-body">
@@ -480,17 +485,17 @@ function renderCampanhas() {
         <div class="camp-desc">${esc(c.desc)}</div>
         <div class="camp-meta">
           ${sistemaBadge(c.sistema)}
-          <span class="meta-chip">👥 ${esc(c.jogadores)} jogadores</span>
-          <span class="meta-chip">📖 ${esc(c.sessoes)} sessões</span>
+          <span class="meta-chip">${icone('group')} ${esc(c.jogadores)} jogadores</span>
+          <span class="meta-chip">${icone('menu_book')} ${esc(c.sessoes)} sessões</span>
         </div>
         ${chars.length ? `<div class="camp-chars-mini">${chars.slice(0,4).map(p=>`<div class="char-mini-dot" title="${esc(p.nome)}">${esc(p.nome[0])}</div>`).join('')}${chars.length > 4 ? `<div class="char-mini-dot more">+${chars.length-4}</div>` : ''}</div>` : ''}
       </div>
     </div>`;
   }).join('') + `
-    <div class="new-card fade-in" onclick="openModal('modalCampanha')">
-      <div class="new-card-icon">⚔</div>
-      <div class="new-card-label">NOVA CAMPANHA</div>
-    </div>`;
+    <button type="button" class="new-card fade-in" onclick="openModal('modalCampanha')">
+      <span class="new-card-icon">${icone('swords')}</span>
+      <span class="new-card-label">Nova campanha</span>
+    </button>`;
 
   document.getElementById('count-campanhas').textContent = CAMPANHAS.length;
   atualizarFiltrosCamp();
@@ -590,7 +595,7 @@ function abrirCampanha(id) {
   if (s && s.urlCampanha) {
     abrirFicha(`${s.urlCampanha}?id=${c.id}`);
   } else {
-    showToast('⚠ Painel de campanha não configurado para este sistema.', 'warning');
+    showToast('Painel de campanha não configurado para este sistema.', 'warning');
   }
 }
 
@@ -603,8 +608,8 @@ function charMiniCard(p, campId, nacamp) {
   <div class="char-det-card">
     <div class="char-det-icon" style="color:${s?.cor||'var(--gold)'}">${sysIcon(s,'1.8em')}</div>
     <div class="char-det-info">
-      <div class="char-det-nome">${p.nome}</div>
-      <div class="char-det-sub">${p.dados?.cls || '—'}${prog ? ' · '+prog.texto : ''}</div>
+      <div class="char-det-nome">${esc(p.nome)}</div>
+      <div class="char-det-sub">${esc(p.dados?.cls || '—')}${prog ? ' · ' + esc(prog.texto) : ''}</div>
     </div>
     <button class="char-det-btn ${nacamp?'btn-remove':'btn-add'}" onclick="${fn}('${campId}','${p.id}')">${label}</button>
   </div>`;
@@ -618,7 +623,7 @@ function adicionarCharNaCamp(campId, charId) {
   saveData('forja_campanhas', CAMPANHAS);
   abrirCampanha(campId);
   renderCampanhas();
-  showToast('✦ Personagem adicionado à campanha!', 'gold');
+  showToast('Personagem adicionado à campanha!', 'gold');
 }
 
 function removerCharDaCamp(campId, charId) {
@@ -851,11 +856,11 @@ async function criarCampanha() {
   const desc      = document.getElementById('nc_desc').value.trim();
   const entradaAberta = document.getElementById('nc_entrada').value !== 'fechada';
 
-  if (!nome || !sistema) { showToast('⚠ Preencha o nome e o sistema', 'warning'); return; }
+  if (!nome || !sistema) { showToast('Preencha o nome e o sistema', 'warning'); return; }
 
   const sistemaCampanha = getSistema(sistema);
   if (!sistemaCampanha || sistemaCampanha.disponivel === false) {
-    showToast('⚠ Este sistema ainda não está disponível para campanhas.', 'warning');
+    showToast('Este sistema ainda não está disponível para campanhas.', 'warning');
     return;
   }
 
@@ -878,7 +883,7 @@ async function _executarCriacaoCampanha(dadosForm) {
   const usuario = usuarioLogado();
   if (!usuario || !usuario.id) {
     console.error('[forja] tentativa de criar campanha sem usuário válido — abortando para não gravar mestre_id nulo. usuarioLogado() =', usuario);
-    showToast('⚠ Sessão ainda carregando, tente novamente em um instante.', 'warning');
+    showToast('Sessão ainda carregando, tente novamente em um instante.', 'warning');
     guardarAcaoPendente('criarCampanha', dadosForm);
     return;
   }
@@ -897,7 +902,7 @@ async function _executarCriacaoCampanha(dadosForm) {
 
   if (error) {
     console.error('[forja] erro ao criar campanha:', error.message);
-    showToast('⚠ Erro ao criar campanha: ' + error.message, 'warning');
+    showToast('Erro ao criar campanha: ' + error.message, 'warning');
     return;
   }
 
@@ -922,7 +927,7 @@ async function _executarCriacaoCampanha(dadosForm) {
     .single();
   if (erroConvite) console.error('[forja] erro ao buscar convite:', erroConvite.message);
   const mensagem = convite ? ` Código de convite: ${convite.codigo}` : '';
-  showToast(`⚔ Campanha "${nome}" criada!${mensagem}`, 'gold');
+  showToast(`Campanha "${nome}" criada!${mensagem}`, 'gold');
 }
 
 let _ecCampanhaEncontrada = null;
@@ -1027,7 +1032,7 @@ async function confirmarEntrarCampanha() {
 
   const usuario = usuarioLogado();
   if (!usuario || !usuario.id) {
-    showToast('⚠ Sessão ainda carregando, tente novamente em um instante.', 'warning');
+    showToast('Sessão ainda carregando, tente novamente em um instante.', 'warning');
     return;
   }
 
@@ -1046,7 +1051,7 @@ async function confirmarEntrarCampanha() {
     } else {
       const nomeNovo = document.getElementById('ec_novo_personagem_nome').value.trim();
       if (!nomeNovo) {
-        showToast('⚠ Dê um nome ao seu personagem.', 'warning');
+        showToast('Dê um nome ao seu personagem.', 'warning');
         btnEntrar.disabled = false;
         return;
       }
@@ -1059,7 +1064,7 @@ async function confirmarEntrarCampanha() {
 
       if (erroCriar) {
         console.error('[forja] erro ao criar personagem para entrar na campanha:', erroCriar.message);
-        showToast('⚠ Erro ao criar personagem: ' + erroCriar.message, 'warning');
+        showToast('Erro ao criar personagem: ' + erroCriar.message, 'warning');
         btnEntrar.disabled = false;
         return;
       }
@@ -1074,7 +1079,7 @@ async function confirmarEntrarCampanha() {
 
     if (erroEntrar) {
       console.error(`[forja] erro em ${nomeFuncao}:`, erroEntrar.message);
-      showToast('⚠ ' + erroEntrar.message, 'warning');
+      showToast(erroEntrar.message, 'warning');
       btnEntrar.disabled = false;
       return;
     }
@@ -1082,12 +1087,12 @@ async function confirmarEntrarCampanha() {
     closeModal('modalEntrarCampanha');
 
     if (_ecCampanhaEncontrada.entrada_aberta) {
-      showToast(`⚔ Você entrou em "${_ecCampanhaEncontrada.nome}"!`, 'gold');
+      showToast(`Você entrou em "${_ecCampanhaEncontrada.nome}"!`, 'gold');
       await carregarDadosDoSupabase();
       renderCampanhas();
       renderPersonagens();
     } else {
-      showToast(`✦ Pedido enviado! Aguarde a aprovação do mestre de "${_ecCampanhaEncontrada.nome}".`, 'gold');
+      showToast(`Pedido enviado! Aguarde a aprovação do mestre de "${_ecCampanhaEncontrada.nome}".`, 'gold');
     }
   } finally {
     btnEntrar.disabled = false;
@@ -1106,7 +1111,6 @@ function renderPersonagens() {
 
   grid.innerHTML = filtrados.map((p, i) => {
     const s = getSistema(p.sistema);
-    const d = p.dados || {};
     const prog = progressaoDoChar(p, s);
     const campanhasDoChar = CAMPANHAS.filter(c => c.id === p.campanhaId);
     return `
@@ -1114,20 +1118,20 @@ function renderPersonagens() {
       <button class="char-delete-btn" title="Excluir personagem" onclick="event.stopPropagation(); confirmarDeletarPersonagem('${p.id}')">✕</button>
       <div class="char-card-avatar" style="color:${s?.cor||'var(--gold)'}; border-color:${s?.cor||'var(--gold-dark)'}40; ${p.foto ? 'background:none;' : ''}">
         ${p.foto
-          ? `<img src="${p.foto}" alt="${p.nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`
+          ? `<img src="${esc(p.foto)}" alt="Foto de ${esc(p.nome)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`
           : sysIcon(s,'2.8em')}
-        ${prog ? `<div class="char-level-badge">${prog.texto}</div>` : ''}
+        ${prog ? `<div class="char-level-badge">${esc(prog.texto)}</div>` : ''}
       </div>
-      <div class="char-nome">${p.nome}</div>
-      <div class="char-sub">${subtituloChar(p, s)}</div>
+      <div class="char-nome">${esc(p.nome)}</div>
+      <div class="char-sub">${esc(subtituloChar(p, s))}</div>
       ${sistemaBadge(p.sistema)}
-      ${campanhasDoChar.length ? `<div class="char-camps-line">⚔ ${campanhasDoChar.map(c=>esc(c.nome)).join(', ')}</div>` : ''}
+      ${campanhasDoChar.length ? `<div class="char-camps-line">${icone('swords')} ${campanhasDoChar.map(c=>esc(c.nome)).join(', ')}</div>` : ''}
     </div>`;
   }).join('') + `
-    <div class="new-card fade-in" onclick="openModal('modalPersonagem')">
-      <div class="new-card-icon">✦</div>
-      <div class="new-card-label">NOVO PERSONAGEM</div>
-    </div>`;
+    <button type="button" class="new-card fade-in" onclick="openModal('modalPersonagem')">
+      <span class="new-card-icon">${icone('shield')}</span>
+      <span class="new-card-label">Novo personagem</span>
+    </button>`;
 
   document.getElementById('count-personagens').textContent = meusPersonagens.length;
   atualizarFiltrosChar(meusPersonagens);
@@ -1155,17 +1159,17 @@ function abrirPersonagem(id) {
   if (!p) return;
   const s = getSistema(p.sistema);
   if (s?.ficha) abrirFicha(`${s.ficha}?id=${p.id}`);
-  else showToast('⚠ Ficha não configurada para este sistema.', 'warning');
+  else showToast('Ficha não configurada para este sistema.', 'warning');
 }
 
 async function criarPersonagem() {
   const nome    = document.getElementById('ch_name').value.trim();
   const sistema = document.getElementById('ch_system').value;
-  if (!nome || !sistema) { showToast('⚠ Preencha o nome e o sistema', 'warning'); return; }
+  if (!nome || !sistema) { showToast('Preencha o nome e o sistema', 'warning'); return; }
 
   const sistemaPersonagem = getSistema(sistema);
   if (!sistemaPersonagem || sistemaPersonagem.disponivel === false) {
-    showToast('⚠ Este sistema ainda não está disponível para personagens.', 'warning');
+    showToast('Este sistema ainda não está disponível para personagens.', 'warning');
     return;
   }
 
@@ -1190,7 +1194,7 @@ async function _executarCriacaoPersonagem(dadosForm) {
   const usuario = usuarioLogado();
   if (!usuario || !usuario.id) {
     console.error('[forja] tentativa de criar personagem sem usuário válido — abortando para não gravar dono_id nulo. usuarioLogado() =', usuario);
-    showToast('⚠ Sessão ainda carregando, tente novamente em um instante.', 'warning');
+    showToast('Sessão ainda carregando, tente novamente em um instante.', 'warning');
     guardarAcaoPendente('criarPersonagem', dadosForm);
     return;
   }
@@ -1202,7 +1206,7 @@ async function _executarCriacaoPersonagem(dadosForm) {
 
   if (error) {
     console.error('[forja] erro ao criar personagem:', error.message);
-    showToast('⚠ Erro ao criar personagem: ' + error.message, 'warning');
+    showToast('Erro ao criar personagem: ' + error.message, 'warning');
     return;
   }
 
@@ -1224,7 +1228,7 @@ async function _executarCriacaoPersonagem(dadosForm) {
   if (s?.ficha) {
     abrirFicha(`${s.ficha}?id=${novo.id}&nome=${encodeURIComponent(nome)}`);
   } else {
-    showToast(`✦ ${nome} criado(a) com sucesso!`, 'gold');
+    showToast(`${nome} criado(a) com sucesso!`, 'gold');
   }
 }
 
@@ -1257,7 +1261,7 @@ function executarDeletarPersonagem() {
   closeModal('modalConfirmDelete');
   renderPersonagens();
   renderCampanhas();
-  showToast(`🗑 ${p ? p.nome : 'Personagem'} foi apagado.`, 'warning');
+  showToast(`${p ? p.nome : 'Personagem'} foi apagado.`, 'warning');
 }
 
 function renderSistemas() {
@@ -1275,16 +1279,16 @@ function renderSistemas() {
       <div class="sistema-nome">${s.nome}</div>
       <div class="sistema-desc">${s.desc}</div>
       <div class="sistema-stats">
-        <span>⚔ ${camps} campanha${camps!==1?'s':''}</span>
-        <span>🧙 ${chars} personagem${chars!==1?'s':''}</span>
+        <span>${icone('swords')} ${camps} campanha${camps!==1?'s':''}</span>
+        <span>${icone('shield')} ${chars} personagem${chars!==1?'s':''}</span>
       </div>
       ${desabilitado
-        ? `<button class="sistema-btn" style="border-color:${s.cor}40;color:${s.cor};cursor:not-allowed;" onclick="showToast('🔧 Este sistema ainda está sendo migrado — em breve!','info')">Em breve</button>`
+        ? `<button class="sistema-btn" style="border-color:${s.cor}40;color:${s.cor};cursor:not-allowed;" onclick="showToast('Este sistema ainda está sendo migrado — em breve!','info')">Em breve</button>`
         : `<button class="sistema-btn" style="border-color:${s.cor}40;color:${s.cor}" onclick="window.location.href='features/livros/sistema-hub.html?sys=${s.id}'">Ver Sistema →</button>`
       }
     </div>`;
   }).join('') + `
-    <div class="sistema-card sistema-add fade-in" onclick="showToast('🔧 Em breve você poderá adicionar sistemas customizados!','info')">
+    <div class="sistema-card sistema-add fade-in" onclick="showToast('Em breve você poderá adicionar sistemas customizados!','info')">
       <div class="sistema-icon" style="opacity:0.3">+</div>
       <div class="sistema-nome" style="opacity:0.4">Adicionar Sistema</div>
       <div class="sistema-desc" style="opacity:0.3">Importe ou configure um sistema personalizado.</div>
@@ -1330,7 +1334,7 @@ function renderLivrosSistemasGrid() {
       <div class="sistema-nome">${s.nome}</div>
       <div class="sistema-desc">${s.desc}</div>
       <div class="sistema-stats">
-        <span>📚 ${livros.length} livro${livros.length !== 1 ? 's' : ''}</span>
+        <span>${icone('menu_book')} ${livros.length} livro${livros.length !== 1 ? 's' : ''}</span>
       </div>
     </div>`;
   }).join('');
@@ -1345,7 +1349,7 @@ function preencherSelectsSistema() {
       const opt = document.createElement('option');
       opt.value = s.id;
       const indisponivel = s.disponivel === false;
-      opt.textContent = s.icon + ' ' + s.nome + (indisponivel ? ' (Em breve)' : '');
+      opt.textContent = s.nome + (indisponivel ? ' (Em breve)' : '');
       opt.disabled = indisponivel;
       sel.appendChild(opt);
     });
@@ -1473,7 +1477,7 @@ init();
       document.getElementById('btnSair').onclick = async () => { await logout(); window.location.reload(); };
     } else {
       el.innerHTML = `
-        <button id="btnEntrar" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;color:var(--gold,#C9A84C);background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.4);padding:8px 20px;cursor:pointer;text-transform:uppercase;border-radius:2px;transition:all 0.2s;">✦ Entrar com Discord</button>
+        <button id="btnEntrar" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;color:var(--gold,#C9A84C);background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.4);padding:8px 20px;cursor:pointer;text-transform:uppercase;border-radius:2px;transition:all 0.2s;">Entrar com Discord</button>
       `;
       document.getElementById('btnEntrar').onclick = () => exigirLogin('Bem-vindo à Forja das Eras');
     }
