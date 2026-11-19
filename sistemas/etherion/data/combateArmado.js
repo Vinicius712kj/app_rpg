@@ -137,7 +137,7 @@ const sistemaCombateArmado = {
     espadas: {
       nome: 'Espadas',
       filosofia: 'Versatilidade Disciplinada',
-      icone: '🗡️',
+      icone: 'swords',
       dadoBase: 'd8',
       alcance: 'curto',
       acaoFavorecida: 'desviar',
@@ -197,7 +197,7 @@ const sistemaCombateArmado = {
     machados: {
       nome: 'Machados',
       filosofia: 'Dano Comprometido',
-      icone: '🪓',
+      icone: 'hardware',
       dadoBase: 'd10',
       alcance: 'curto',
       acaoFavorecida: 'romper',
@@ -256,7 +256,7 @@ const sistemaCombateArmado = {
     martelos: {
       nome: 'Martelos',
       filosofia: 'Impacto e Ruptura',
-      icone: '🔨',
+      icone: 'gavel',
       dadoBase: 'd10',
       alcance: 'curto',
       acaoFavorecida: 'romper',
@@ -319,7 +319,7 @@ const sistemaCombateArmado = {
     lancas: {
       nome: 'Lanças',
       filosofia: 'Controle de Distância',
-      icone: '🔱',
+      icone: 'swords',
       dadoBase: 'd8',
       alcance: 'medio',             // alcance natural maior
       acaoFavorecida: 'romper',      // à distância, sem custo extra
@@ -380,7 +380,7 @@ const sistemaCombateArmado = {
     adagas: {
       nome: 'Adagas',
       filosofia: 'Velocidade e Precisão Letal',
-      icone: '🗡️',
+      icone: 'swords',
       dadoBase: 'd6',               // o menor dano base
       alcance: 'toque',             // precisa estar colada
       acaoFavorecida: 'romper',      // múltiplo via Golpe Duplo
@@ -441,7 +441,7 @@ const sistemaCombateArmado = {
     arcos: {
       nome: 'Arcos',
       filosofia: 'Domínio à Distância',
-      icone: '🏹',
+      icone: 'target',
       dadoBase: 'd8',
       alcance: 'longo',             // único com alcance longo padrão
       acaoFavorecida: 'romper',      // à distância
@@ -500,7 +500,7 @@ const sistemaCombateArmado = {
     foices: {
       nome: 'Foices',
       filosofia: 'Fluxo e Colheita',
-      icone: '🌾',
+      icone: 'grass',
       dadoBase: 'd8',
       alcance: 'curto',
       acaoFavorecida: 'romper',      // com Arco de Colheita
@@ -561,7 +561,7 @@ const sistemaCombateArmado = {
     correntes: {
       nome: 'Correntes',
       filosofia: 'Imprevisibilidade e Alcance Variável',
-      icone: '⛓️',
+      icone: 'link',
       dadoBase: 'd6',
       alcance: 'variavel',          // declara Curto ou Médio no momento da Ação
       acaoFavorecida: 'prender',

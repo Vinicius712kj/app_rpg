@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campanha — Tormenta 20</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../core/css/ui-icons.css">
 <link rel="stylesheet" href="../../../core/css/ficha-base.css">
 <style>
   .dash-banner {
@@ -66,11 +67,11 @@
 
 <!-- ===== TABS ===== -->
 <nav class="sheet-tabs">
-  <button class="sheet-tab active" data-tab="personagens" onclick="switchTab('personagens')">🧑‍🤝‍🧑 Guilda</button>
-  <button class="sheet-tab" data-tab="npcs" onclick="switchTab('npcs')">👥 NPCs</button>
-  <button class="sheet-tab" data-tab="combates" onclick="switchTab('combates')">⚔ Combates</button>
-  <button class="sheet-tab" data-tab="dados" onclick="switchTab('dados')">🎲 Dados</button>
-  <button class="sheet-tab" data-tab="diario" onclick="switchTab('diario')">📜 Crônica</button>
+  <button class="sheet-tab active" data-tab="personagens" onclick="switchTab('personagens')"><span class="ui-icon" data-icon="group" aria-hidden="true"></span> Guilda</button>
+  <button class="sheet-tab" data-tab="npcs" onclick="switchTab('npcs')"><span class="ui-icon" data-icon="person" aria-hidden="true"></span> NPCs</button>
+  <button class="sheet-tab" data-tab="combates" onclick="switchTab('combates')"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span> Combates</button>
+  <button class="sheet-tab" data-tab="dados" onclick="switchTab('dados')"><span class="ui-icon" data-icon="casino" aria-hidden="true"></span> Dados</button>
+  <button class="sheet-tab" data-tab="diario" onclick="switchTab('diario')"><span class="ui-icon" data-icon="description" aria-hidden="true"></span> Crônica</button>
 </nav>
 
 <!-- ===== PAGE WRAP ===== -->
@@ -295,7 +296,7 @@
 
     if (error) {
       console.error('[campanha-tormenta] erro ao salvar anotações:', error.message);
-      showToast('⚠ Erro ao salvar anotações.');
+      showToast('Erro ao salvar anotações.');
       avisarShell('ficha:erro-salvo');
       return;
     }

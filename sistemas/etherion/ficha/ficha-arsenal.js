@@ -196,7 +196,7 @@ function gerarHTMLCardTecnica(tecnica) {
   const nomePrincipal = tecnica.nomeCategoria || tecnica.nomeVia;
   const acao = tecnica.nomeAcao || tecnica.nomeImpulso;
   
-  const icone = tecnica.icone || '⚔';
+  const icone = iconeDaFicha(tecnica.icone, 'swords');
   const especializacaoText = tecnica.especializacao ? ` · ${tecnica.especializacao.nome}` : '';
 
   const tagsHtml = (tecnica.tags || []).map(t => `<span class="magia-badge" style="border: 1px solid rgba(255,255,255,0.1)">${esc(t)}</span>`).join('');
@@ -363,12 +363,12 @@ function gerarHTMLListaTecnicasDesarmadas(d) {
     return `
     <div class="box" style="margin-bottom:16px">
       <div class="box-title">Técnicas Corporais (Combate Desarmado)</div>
-      <div class="magia-card-vazio">Nenhuma técnica registrada. Acesse o 🥋 Arsenal para montá-las.</div>
+      <div class="magia-card-vazio">Nenhuma técnica registrada. Acesse o Arsenal para montá-las.</div>
     </div>`;
   }
 
   const itens = salvas.map(t => {
-    const via = sistemaCombateDesarmado.vias[t.via] || { nome: t.via, icone: '👊' };
+    const via = sistemaCombateDesarmado.vias[t.via] || { nome: t.via, icone: 'sports_martial_arts' };
     const imp = sistemaCombateDesarmado.impulsos[t.impulso] || { nome: t.impulso };
     const pos = sistemaCombateDesarmado.posturas[t.postura] || { nome: t.postura };
     
@@ -383,7 +383,7 @@ function gerarHTMLListaTecnicasDesarmadas(d) {
     return `
     <div class="magsalva-item" style="--cor-aspecto:#C9A84C">
       <div class="magsalva-linha">
-        <div class="magsalva-icone">${via.icone}</div>
+        <div class="magsalva-icone">${iconeDaFicha(via.icone)}</div>
         <div class="magsalva-info" onclick="toggleDetalheTecnica('tecdesarm', '${t.id}')">
           <div class="magsalva-titulo">${esc(via.nome)}</div>
           <div class="magsalva-subtitulo">${esc(imp.nome)} · Postura ${esc(pos.nome)}</div>
@@ -416,12 +416,12 @@ function gerarHTMLListaTecnicasArmadas(d) {
     return `
     <div class="box" style="margin-bottom:16px">
       <div class="box-title">Técnicas Marciais (Combate Armado)</div>
-      <div class="magia-card-vazio">Nenhuma técnica registrada. Acesse o 🥋 Arsenal para montá-las.</div>
+      <div class="magia-card-vazio">Nenhuma técnica registrada. Acesse o Arsenal para montá-las.</div>
     </div>`;
   }
 
   const itens = salvas.map(t => {
-    const cat = sistemaCombateArmado.categorias[t.categoria] || { nome: t.categoria, icone: '⚔️' };
+    const cat = sistemaCombateArmado.categorias[t.categoria] || { nome: t.categoria, icone: 'swords' };
     const acao = sistemaCombateArmado.acoes[t.acao] || { nome: t.acao };
     const pos = sistemaCombateArmado.posturas[t.postura] || { nome: t.postura };
     
@@ -436,7 +436,7 @@ function gerarHTMLListaTecnicasArmadas(d) {
     return `
     <div class="magsalva-item" style="--cor-aspecto:#556677">
       <div class="magsalva-linha">
-        <div class="magsalva-icone">${cat.icone}</div>
+        <div class="magsalva-icone">${iconeDaFicha(cat.icone)}</div>
         <div class="magsalva-info" onclick="toggleDetalheTecnica('tecarm', '${t.id}')">
           <div class="magsalva-titulo">${esc(cat.nome)}</div>
           <div class="magsalva-subtitulo">${esc(acao.nome)} · Postura ${esc(pos.nome)}</div>

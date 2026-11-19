@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leitor — Forja das Eras</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../core/css/ui-icons.css">
 <link rel="stylesheet" href="livro-leitor.css">
 </head>
 <body>
@@ -20,7 +21,7 @@
 
 <!-- ===== BREADCRUMB (no lugar das tabs, já que aqui não há abas) ===== -->
 <nav class="sheet-tabs">
-  <span class="crumb-link" style="cursor:pointer" onclick="window.location.href='../../index.html'">📚 Livros</span>
+  <span class="crumb-link" style="cursor:pointer" onclick="window.location.href='../../index.html'"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> Livros</span>
   <span class="crumb-sep">›</span>
   <span class="crumb-link" style="cursor:pointer" onclick="voltarParaListaDoSistema()" id="tabsSistemaNome">—</span>
   <span class="crumb-sep">›</span>
@@ -64,14 +65,14 @@ function getParamUrl(nome) {
 async function init() {
   const caminhoArquivo = getParamUrl('arquivo');
   if (!caminhoArquivo) {
-    document.getElementById('leitorContainer').innerHTML = `<div class="loading-msg">⚠ Nenhum livro especificado.</div>`;
+    document.getElementById('leitorContainer').innerHTML = `<div class="loading-msg">Nenhum livro especificado.</div>`;
     return;
   }
 
   // o caminho vem como "dnd5e/livro-do-jogador.json" — a primeira parte é o sistema
   const sistemaId = caminhoArquivo.split('/')[0];
-  const sLabel = SISTEMAS_LABEL[sistemaId] || { nome: sistemaId, icon: '📖' };
-  document.getElementById('tabsSistemaNome').textContent = `${sLabel.icon} ${sLabel.nome}`;
+  const sLabel = SISTEMAS_LABEL[sistemaId] || { nome: sistemaId, icon: '' };
+  document.getElementById('tabsSistemaNome').textContent = [sLabel.icon, sLabel.nome].filter(Boolean).join(' ');
 
   try {
     const resp = await fetch(`../../assets/livros/${caminhoArquivo}`);
@@ -79,7 +80,7 @@ async function init() {
     livroAtualObj = await resp.json();
   } catch (e) {
     console.error(e);
-    document.getElementById('leitorContainer').innerHTML = `<div class="loading-msg">⚠ Não consegui abrir este livro. Verifique se o arquivo "${caminhoArquivo}" existe em assets/livros/.</div>`;
+    document.getElementById('leitorContainer').innerHTML = `<div class="loading-msg">Não consegui abrir este livro. Verifique se o arquivo "${caminhoArquivo}" existe em assets/livros/.</div>`;
     document.getElementById('topbarTitulo').textContent = 'Erro ao abrir';
     return;
   }

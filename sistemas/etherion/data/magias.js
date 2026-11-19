@@ -394,7 +394,7 @@ const sistemaMagia = {
         'esta energia brilham com a mesma inocência que criou o mundo, mas ' +
         'carregam o poder terrível de quem nunca conheceu limites.',
       corHex: '#E8D5B7',
-      icone: '♾️',
+      icone: 'all_inclusive',
       dadoBase: 'd8',
       tracos: { escalaAlcance: 1.0, escalaArea: 1.0, escalaDuracao: 0.8, escalaVisibilidade: 1.4 },
       sequela: {
@@ -426,7 +426,7 @@ const sistemaMagia = {
         'que não perdoa os fracos. Os Grotans Solares sabem: onde Pyraël ' +
         'ilumina, não há sombra onde o mal se esconda, apenas brasas.',
       corHex: '#FF6B1A',
-      icone: '☀️',
+      icone: 'light_mode',
       dadoBase: 'd10',
       tracos: { escalaAlcance: 1.0, escalaArea: 1.6, escalaDuracao: 0.5, escalaVisibilidade: 2.0 },
       sequela: {
@@ -462,7 +462,7 @@ const sistemaMagia = {
         'intensidade que devora sanidade e revela segredos que deveriam ' +
         'permanecer sepultados nas profundezas da memória.',
       corHex: '#B8C6E0',
-      icone: '🌙',
+      icone: 'dark_mode',
       dadoBase: 'd6',
       tracos: { escalaAlcance: 1.2, escalaArea: 0.7, escalaDuracao: 1.8, escalaVisibilidade: 0.5 },
       sequela: {
@@ -495,7 +495,7 @@ const sistemaMagia = {
         'Tempo, porém, sente seus ossos envelhecerem — pois Khaíros cobra ' +
         'cada grão de areia roubado de sua ampulheta.',
       corHex: '#C9A84C',
-      icone: '⏳',
+      icone: 'hourglass_empty',
       dadoBase: 'd6',
       tracos: { escalaAlcance: 1.4, escalaArea: 0.6, escalaDuracao: 1.6, escalaVisibilidade: 0.6 },
       sequela: {
@@ -529,7 +529,7 @@ const sistemaMagia = {
         'relutância — pois ela sabe que sabedoria demais na mão dos ' +
         'ambiciosos só traz ruína, como os Myrran guardam em segredo.',
       corHex: '#4CAF50',
-      icone: '🦉',
+      icone: 'visibility',
       dadoBase: 'd4',
       bonusFixoDados: (c) => c * 2,
       tracos: { escalaAlcance: 1.2, escalaArea: 0.8, escalaDuracao: 1.0, escalaVisibilidade: 0.8 },
@@ -564,7 +564,7 @@ const sistemaMagia = {
         'pele endurecida como casca de árvore ancestral, sentidos aguçados ' +
         'como os dos Feyrin que se movem pelas raízes da floresta.',
       corHex: '#66BB6A',
-      icone: '📖',
+      icone: 'menu_book',
       dadoBase: 'd8',
       tracos: { escalaAlcance: 0.8, escalaArea: 1.0, escalaDuracao: 1.4, escalaVisibilidade: 1.0 },
       sequela: {
@@ -597,7 +597,7 @@ const sistemaMagia = {
         'nas entranhas de Aetherion, a pedra sussurra — e quem ouve seus ' +
         'segredos ergue fortalezas que nem o Caos de Zyrhûn derrubou.',
       corHex: '#8D6E63',
-      icone: '🪨',
+      icone: 'landscape',
       dadoBase: 'd10',
       tracos: { escalaAlcance: 0.6, escalaArea: 1.4, escalaDuracao: 1.2, escalaVisibilidade: 1.4 },
       sequela: {
@@ -633,7 +633,7 @@ const sistemaMagia = {
         'honra — apenas a aniquilação desenfreada que Zyrhûn sussurra ' +
         'das profundezas de sua cela eterna.',
       corHex: '#9C27B0',
-      icone: '💥',
+      icone: 'explosion',
       dadoBase: 'd12',
       tracos: { escalaAlcance: 1.0, escalaArea: 1.2, escalaDuracao: 0.6, escalaVisibilidade: 1.8 },
       sequela: {
@@ -667,7 +667,7 @@ const sistemaMagia = {
         'que paralisa o sistema nervoso do alvo como se o próprio céu o ' +
         'tivesse escolhido para punir. O ar cheira a ozônio e medo.',
       corHex: '#42A5F5',
-      icone: '⚡',
+      icone: 'bolt',
       dadoBase: 'd10',
       tracos: { escalaAlcance: 1.2, escalaArea: 1.2, escalaDuracao: 0.4, escalaVisibilidade: 2.2 },
       sequela: {
@@ -701,7 +701,7 @@ const sistemaMagia = {
         'e a purificação brutal de águas que lavam venenos e máculas como ' +
         'o dilúvio que limpou os campos arruinados após a guerra de Zyrhûn.',
       corHex: '#0288D1',
-      icone: '🌊',
+      icone: 'waves',
       dadoBase: 'd8',
       tracos: { escalaAlcance: 1.0, escalaArea: 1.2, escalaDuracao: 1.2, escalaVisibilidade: 1.0 },
       sequela: {
@@ -736,7 +736,7 @@ const sistemaMagia = {
         'suas armas com lágrimas nos olhos, cegos pela perfeição de algo ' +
         'que nunca existiu.',
       corHex: '#EC407A',
-      icone: '🦋',
+      icone: 'flutter_dash',
       dadoBase: 'd6',
       tracos: { escalaAlcance: 1.0, escalaArea: 1.0, escalaDuracao: 1.4, escalaVisibilidade: 1.2 },
       sequela: {
@@ -771,7 +771,7 @@ const sistemaMagia = {
         'seu estandarte — disciplinados, honrados, e absolutamente brutais ' +
         'na execução de sua justiça cega.',
       corHex: '#FFD54F',
-      icone: '⚖️',
+      icone: 'balance',
       dadoBase: 'd8',
       bonusFixoDados: (c) => c,
       tracos: { escalaAlcance: 1.0, escalaArea: 1.0, escalaDuracao: 1.0, escalaVisibilidade: 1.4 },
@@ -807,7 +807,7 @@ const sistemaMagia = {
         'os ossos não se soldam, e a vida simplesmente esquece como voltar. ' +
         'Ela concedeu longevidade aos Elvarin, mas nunca de graça.',
       corHex: '#4E342E',
-      icone: '⚰️',
+      icone: 'skull',
       dadoBase: 'd12',
       tracos: { escalaAlcance: 0.8, escalaArea: 0.7, escalaDuracao: 2.0, escalaVisibilidade: 0.4 },
       sequela: {
@@ -842,7 +842,7 @@ const sistemaMagia = {
         'morte — há algo pior: a eternidade consciente no escuro, sabendo ' +
         'que ninguém jamais virá.',
       corHex: '#37474F',
-      icone: '⛩️',
+      icone: 'temple_buddhist',
       dadoBase: 'd6',
       tracos: { escalaAlcance: 0.8, escalaArea: 1.0, escalaDuracao: 1.6, escalaVisibilidade: 0.3 },
       sequela: {
@@ -878,7 +878,7 @@ const sistemaMagia = {
         'enquanto a vítima compreende, lentamente, que cada luta a ' +
         'enreda mais.',
       corHex: '#6A1B9A',
-      icone: '🕷️',
+      icone: 'bug_report',
       dadoBase: 'd4',
       tracos: { escalaAlcance: 0.8, escalaArea: 1.2, escalaDuracao: 1.6, escalaVisibilidade: 0.5 },
       sequela: {
@@ -917,7 +917,7 @@ const sistemaMagia = {
         'ainda é possível ver Nyvelis andando entre as manadas, contando ' +
         'quantas ainda restam.',
       corHex: '#A8DCE0',
-      icone: '❄️',
+      icone: 'ac_unit',
       dadoBase: 'd6',
       tracos: { escalaAlcance: 0.8, escalaArea: 1.2, escalaDuracao: 1.4, escalaVisibilidade: 0.6 },
       sequela: {

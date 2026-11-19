@@ -354,7 +354,7 @@ function mostrarEstadoVazio(msg) {
   if (tabs) tabs.style.display = 'none';
   document.getElementById('sheetContent').innerHTML = `
     <div class="empty-state">
-      <div class="empty-state-icon">⚠</div>
+      <div class="empty-state-icon"><span class="ui-icon" data-icon="warning" aria-hidden="true"></span></div>
       <div class="empty-state-text">${msg}</div>
       <button class="sheet-back" onclick="voltarParaHome()" style="opacity:0.8">← Voltar para Forja das Eras</button>
     </div>`;
@@ -1162,7 +1162,7 @@ function renderInventario() {
           <span class="carry-meter-val ${sobrecarregado?'over':''}"><span id="carryTotalLabel">${pesoTotal.toFixed(1)}</span> / <input type="number" step="0.1" class="hitdice-input" style="width:56px;display:inline-block" value="${capOverride!==null&&capOverride!==undefined?capOverride:''}" placeholder="${capacidadeAuto}" oninput="atualizarCapacidadeOverride(this.value)"> un.</span>
         </div>
         <div class="carry-bar-track"><div class="carry-bar-fill ${sobrecarregado?'over':''}" style="width:${pct}%"></div></div>
-        ${sobrecarregado ? `<div style="font-family:'EB Garamond',serif;font-style:italic;font-size:12px;color:var(--blood-light);opacity:0.8;margin-top:6px">⚠ Sobrecarregado — desloc. reduzido e desvantagem em testes físicos.</div>` : ''}
+        ${sobrecarregado ? `<div style="font-family:'EB Garamond',serif;font-style:italic;font-size:12px;color:var(--blood-light);opacity:0.8;margin-top:6px"><span class="ui-icon" data-icon="warning" aria-hidden="true"></span> Sobrecarregado — desloc. reduzido e desvantagem em testes físicos.</div>` : ''}
         <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:11px;color:var(--parchment-dark);opacity:0.45;margin-top:4px">Capacidade automática: Força × 15 = ${capacidadeAuto} un. (deixe o campo vazio pra usar o automático)</div>
       </div>
 

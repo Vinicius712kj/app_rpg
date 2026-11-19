@@ -1,6 +1,10 @@
 const SISTEMAS = window.SISTEMAS || [];
 const getSistema = window.getSistema || function (id) { return SISTEMAS.find(s => s.id === id) || null; };
 
+function iconeHub(nome) {
+  return `<span class="ui-icon" data-icon="${nome}" aria-hidden="true"></span>`;
+}
+
 function sysIcon(s, size = '1.4em') {
   if (!s) return '✦';
   if (s.img) return `<img src="${s.img}" alt="${s.nome}" style="width:${size};height:${size};object-fit:contain;display:inline-block;vertical-align:middle;">`;
@@ -51,13 +55,13 @@ function esc(s) {
 // DEFINIÇÃO DAS ABAS
 // =============================================================
 const HUB_TABS = [
-  { id: 'estatisticas', label: 'Estatísticas', icon: '📊', pronto: true },
-  { id: 'campanhas',    label: 'Campanhas',    icon: '⚔', pronto: true },
-  { id: 'bestiario',    label: 'Bestiário',    icon: '🐉', pronto: false },
-  { id: 'magias',       label: 'Magias',       icon: '✦', pronto: false },
-  { id: 'equipamentos', label: 'Equipamentos', icon: '🗡', pronto: false },
-  { id: 'regras',       label: 'Regras',       icon: '📜', pronto: false },
-  { id: 'homebrew',     label: 'HomeBrew',     icon: '🔥', pronto: false },
+  { id: 'estatisticas', label: 'Estatísticas', icon: 'bar_chart', pronto: true },
+  { id: 'campanhas',    label: 'Campanhas',    icon: 'swords', pronto: true },
+  { id: 'bestiario',    label: 'Bestiário',    icon: 'pets', pronto: false },
+  { id: 'magias',       label: 'Magias',       icon: 'auto_awesome', pronto: false },
+  { id: 'equipamentos', label: 'Equipamentos', icon: 'shield', pronto: false },
+  { id: 'regras',       label: 'Regras',       icon: 'description', pronto: false },
+  { id: 'homebrew',     label: 'HomeBrew',     icon: 'local_fire_department', pronto: false },
 ];
 
 function renderHubTabs() {
@@ -66,7 +70,7 @@ function renderHubTabs() {
     <button class="hub-tab ${t.pronto ? '' : 'disabled'} ${t.id === 'estatisticas' ? 'active' : ''}"
             data-tab="${t.id}"
             onclick="${t.pronto ? `switchHubTab('${t.id}')` : `avisarEmBreve('${t.label}')`}">
-      ${t.icon} ${t.label}
+      ${iconeHub(t.icon)} ${t.label}
       ${t.pronto ? '' : '<span class="hub-tab-soon">em breve</span>'}
     </button>
   `).join('');
@@ -80,7 +84,7 @@ function switchHubTab(id) {
 }
 
 function avisarEmBreve(nomeAba) {
-  showToast(`🔧 A aba "${nomeAba}" ainda está sendo forjada — em breve!`, 'info');
+  showToast(`A aba "${nomeAba}" ainda está sendo forjada — em breve!`, 'info');
 }
 // =============================================================
 // ABA: ESTATÍSTICAS
@@ -125,23 +129,23 @@ function renderEstatisticas() {
 
     <div class="stats-grid">
       <div class="stat-card">
-        <span class="stat-card-icon">⚔</span>
+        <span class="stat-card-icon"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span></span>
         <span class="stat-card-value">${camps.length}</span>
         <span class="stat-card-label">Campanha${camps.length!==1?'s':''}</span>
       </div>
       <div class="stat-card">
-        <span class="stat-card-icon">🧙</span>
+        <span class="stat-card-icon"><span class="ui-icon" data-icon="person" aria-hidden="true"></span></span>
         <span class="stat-card-value">${chars.length}</span>
         <span class="stat-card-label">Personagem${chars.length!==1?'s':''}</span>
       </div>
       <div class="stat-card wide">
-        <span class="stat-card-icon">📜</span>
+        <span class="stat-card-icon"><span class="ui-icon" data-icon="description" aria-hidden="true"></span></span>
         <span class="stat-card-value" style="font-size:18px">${maisAntiga ? esc(maisAntiga.nome) : '—'}</span>
         <span class="stat-card-label">Campanha mais antiga</span>
         ${maisAntiga ? `<span class="stat-card-sub">criada em ${formatarData(dataCriacao(maisAntiga))}</span>` : ''}
       </div>
       <div class="stat-card wide">
-        <span class="stat-card-icon">📅</span>
+        <span class="stat-card-icon"><span class="ui-icon" data-icon="calendar_month" aria-hidden="true"></span></span>
         <span class="stat-card-value" style="font-size:18px">${maisRecenteSessao ? esc(maisRecenteSessao.nome) : '—'}</span>
         <span class="stat-card-label">Sessão mais recente</span>
         ${maisRecenteSessao
@@ -152,7 +156,7 @@ function renderEstatisticas() {
 
     ${camps.length === 0 && chars.length === 0 ? `
       <div class="hub-empty">
-        <div class="hub-empty-icon">🌑</div>
+        <div class="hub-empty-icon"><span class="ui-icon" data-icon="dark_mode" aria-hidden="true"></span></div>
         <div class="hub-empty-text">Ainda não há campanhas ou personagens de ${SISTEMA_ATUAL.nome} por aqui.</div>
       </div>
     ` : ''}
@@ -176,7 +180,7 @@ function renderHubCampanhas() {
     </div>
   ` : `
     <div class="hub-empty">
-      <div class="hub-empty-icon">📖</div>
+      <div class="hub-empty-icon"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span></div>
       <div class="hub-empty-text">Nenhuma campanha de ${SISTEMA_ATUAL.nome} foi criada ainda.</div>
     </div>
   `;
@@ -201,7 +205,7 @@ function campCardHTML(c, i) {
   <div class="camp-card fade-in" style="animation-delay:${i*0.06}s" onclick="abrirCampanhaDoHub('${c.id}')">
     <div class="camp-card-top" style="${c.banner ? `background:url('${c.banner}') center/cover no-repeat` : `background:${s ? `linear-gradient(135deg, ${s.corBg}, rgba(0,0,0,0))` : ''}`}">
       ${c.banner ? `<div class="camp-banner-overlay"></div>` : ''}
-      <div class="camp-icon" style="position:relative;z-index:1">${s ? sysIcon(s,'2.2em') : '⚔'}</div>
+      <div class="camp-icon" style="position:relative;z-index:1">${s ? sysIcon(s,'2.2em') : iconeHub('swords')}</div>
       <span class="camp-status ${st.cls}" style="position:relative;z-index:1">${st.label}</span>
     </div>
     <div class="camp-card-body">
@@ -209,8 +213,8 @@ function campCardHTML(c, i) {
       <div class="camp-desc">${esc(c.desc)}</div>
       <div class="camp-meta">
         ${sistemaBadge(c.sistema)}
-        <span class="meta-chip">👥 ${c.jogadores} jogadores</span>
-        <span class="meta-chip">📖 ${c.sessoes} sessões</span>
+        <span class="meta-chip"><span class="ui-icon" data-icon="group" aria-hidden="true"></span> ${c.jogadores} jogadores</span>
+        <span class="meta-chip"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> ${c.sessoes} sessões</span>
       </div>
       ${chars.length ? `<div class="camp-chars-mini">${chars.slice(0,4).map(p=>`<div class="char-mini-dot" title="${esc(p.nome)}">${esc(p.nome[0])}</div>`).join('')}${chars.length > 4 ? `<div class="char-mini-dot more">+${chars.length-4}</div>` : ''}</div>` : ''}
     </div>
@@ -227,7 +231,7 @@ function abrirCampanhaDoHub(id) {
   if (s && s.urlCampanha) {
     window.location.href = `${s.urlCampanha}?id=${c.id}`;
   } else {
-    showToast('⚠ Painel de campanha não configurado para este sistema.', 'warning');
+    showToast('Painel de campanha não configurado para este sistema.', 'warning');
   }
 }
 // =============================================================
@@ -254,7 +258,7 @@ function showToast(msg, type = '') {
 function soonPanelHTML(tab) {
   return `
     <div class="hub-soon-box">
-      <div class="hub-soon-icon">${tab.icon}</div>
+      <div class="hub-soon-icon">${iconeHub(tab.icon)}</div>
       <div class="hub-soon-title">${tab.label} — em breve</div>
       <div class="hub-soon-text">Esta seção ainda está sendo forjada. Em breve você poderá consultar e gerenciar ${tab.label.toLowerCase()} de ${SISTEMA_ATUAL.nome} por aqui.</div>
     </div>
@@ -281,7 +285,7 @@ function mostrarSistemaInvalido() {
   document.getElementById('hubTabs').style.display = 'none';
   document.getElementById('hubContent').innerHTML = `
     <div class="hub-empty" style="padding-top:120px">
-      <div class="hub-empty-icon">⚠</div>
+      <div class="hub-empty-icon"><span class="ui-icon" data-icon="warning" aria-hidden="true"></span></div>
       <div class="hub-empty-text">Sistema não encontrado. Volte e escolha um sistema válido.</div>
       <button class="hub-back" onclick="voltarParaHome()" style="opacity:0.8;margin-top:8px">← Voltar para Forja das Eras</button>
     </div>`;

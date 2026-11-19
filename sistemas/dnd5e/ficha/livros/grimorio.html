@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grimório — Forja das Eras</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../core/css/ui-icons.css">
 <style>
 :root {
   --parchment:       #F2E8D5;
@@ -377,7 +378,7 @@ select.filter-select option { background: var(--stone-mid); color: var(--parchme
     <!-- FILTROS -->
     <div class="filters">
       <div class="search-box">
-        <span class="search-icon">🔍</span>
+        <span class="search-icon"><span class="ui-icon" data-icon="search" aria-hidden="true"></span></span>
         <input type="text" id="searchInput" placeholder="Buscar magia pelo nome…">
       </div>
       <select class="filter-select" id="schoolSelect">
@@ -712,7 +713,7 @@ function learnSectionHTML(m) {
   return `
     <div class="learn-section" style="border-top:1px solid rgba(139,105,20,0.25); padding:18px 28px 24px;">
       <div style="font-family:'EB Garamond',serif; font-size:13px; font-style:italic; color:${corDestaque}; margin-bottom:10px;">
-        ${status.jaAprendida ? '✓ ' : (status.podeAprender ? '' : '⚠ ')}${status.motivo || ''}
+        ${status.jaAprendida ? '✓ ' : (status.podeAprender ? '' : '<span class="ui-icon" data-icon="warning" aria-hidden="true"></span> ')}${status.motivo || ''}
       </div>
       <button class="learn-btn" ${status.podeAprender ? '' : 'disabled'} onclick="aprenderMagia('${encodeURIComponent(m.nome)}')">
         ${status.jaAprendida ? 'Já Conhecida' : 'Aprender Magia'}

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campanha — Etherion</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../core/css/ui-icons.css">
 <link rel="stylesheet" href="../styles/ficha.css">
 <style>
   /* ===========================================================
@@ -574,16 +575,16 @@
 
   <!-- ===== TABS ===== -->
   <nav class="sheet-tabs">
-    <button class="sheet-tab active" data-tab="inicio" onclick="switchTab('inicio')">🏰 Início</button>
-    <button class="sheet-tab" data-tab="personagens" onclick="switchTab('personagens')">🧑‍🤝‍🧑 Personagens</button>
-    <button class="sheet-tab" data-tab="diario" onclick="switchTab('diario')">📜 Diário</button>
-    <button class="sheet-tab" data-tab="dados" onclick="switchTab('dados')">🎲 Dados</button>
+    <button class="sheet-tab active" data-tab="inicio" onclick="switchTab('inicio')"><span class="ui-icon" data-icon="castle" aria-hidden="true"></span> Início</button>
+    <button class="sheet-tab" data-tab="personagens" onclick="switchTab('personagens')"><span class="ui-icon" data-icon="group" aria-hidden="true"></span> Personagens</button>
+    <button class="sheet-tab" data-tab="diario" onclick="switchTab('diario')"><span class="ui-icon" data-icon="description" aria-hidden="true"></span> Diário</button>
+    <button class="sheet-tab" data-tab="dados" onclick="switchTab('dados')"><span class="ui-icon" data-icon="casino" aria-hidden="true"></span> Dados</button>
     <button class="sheet-tab tab-mestre" data-tab="solicitacoes" onclick="switchTab('solicitacoes')" style="display:none;">
-      🔔 Solicitações<span id="solicitacoesBadge" class="solicitacoes-badge" style="display:none;"></span>
+      <span class="ui-icon" data-icon="notifications" aria-hidden="true"></span> Solicitações<span id="solicitacoesBadge" class="solicitacoes-badge" style="display:none;"></span>
     </button>
-    <button class="sheet-tab tab-mestre" data-tab="npcs" onclick="switchTab('npcs')" style="display:none;">👥 NPCs</button>
-    <button class="sheet-tab tab-mestre" data-tab="bestiario" onclick="switchTab('bestiario')" style="display:none;">🐉 Bestiário</button>
-    <button class="sheet-tab tab-mestre" data-tab="notas" onclick="switchTab('notas')" style="display:none;">🖋 Notas do Mestre</button>
+    <button class="sheet-tab tab-mestre" data-tab="npcs" onclick="switchTab('npcs')" style="display:none;"><span class="ui-icon" data-icon="person" aria-hidden="true"></span> NPCs</button>
+    <button class="sheet-tab tab-mestre" data-tab="bestiario" onclick="switchTab('bestiario')" style="display:none;"><span class="ui-icon" data-icon="pets" aria-hidden="true"></span> Bestiário</button>
+    <button class="sheet-tab tab-mestre" data-tab="notas" onclick="switchTab('notas')" style="display:none;"><span class="ui-icon" data-icon="description" aria-hidden="true"></span> Notas do Mestre</button>
   </nav>
 
   <!-- ===== PAGE WRAP ===== -->
@@ -1418,7 +1419,7 @@
 
       if (error) {
         console.error('[campanha-etherion] erro ao salvar entrada de diário:', error.message);
-        showToast('⚠ Erro ao registrar a sessão.');
+        showToast('Erro ao registrar a sessão.');
         avisarShell('ficha:erro-salvo');
         return;
       }
@@ -1536,7 +1537,7 @@
 
     if (error) {
       console.error(`[campanha-etherion] erro ao ${acao} solicitação:`, error.message);
-      showToast(`⚠ Erro ao ${acao === 'aprovar' ? 'aprovar' : 'rejeitar'} solicitação.`);
+      showToast(`Erro ao ${acao === 'aprovar' ? 'aprovar' : 'rejeitar'} solicitação.`);
       botoes.forEach(b => b.disabled = false);
       return;
     }
@@ -1601,7 +1602,7 @@
 
     if (error) {
       console.error('[campanha-etherion] erro ao alternar visibilidade do NPC:', error.message);
-      showToast('⚠ Erro ao atualizar visibilidade.');
+      showToast('Erro ao atualizar visibilidade.');
       return;
     }
 
@@ -1638,7 +1639,7 @@
 
       if (error) {
         console.error('[campanha-etherion] erro ao criar NPC:', error.message);
-        showToast('⚠ Erro ao criar NPC.');
+        showToast('Erro ao criar NPC.');
         return;
       }
 
@@ -1783,7 +1784,7 @@
         if (solicitacoesPendentes.some(s => s.id === payload.new.id)) return;
         solicitacoesPendentes.push(payload.new);
         await renderSolicitacoes();
-        showToast('🔔 Novo pedido de entrada na campanha!');
+        showToast('Novo pedido de entrada na campanha!');
       })
       .subscribe((status) => {
         const dot = document.getElementById('realtimeDot');

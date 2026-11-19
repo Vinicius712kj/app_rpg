@@ -9,7 +9,7 @@
 //     if (!sessao) return; // pessoa cancelou o login (ação pendente
 //                          // continua salva, será retomada no próximo load)
 //     // ...resto da função (salvar no Supabase, etc)...
-//     consumirAcaoPendente('criarCampanha'); // ⚠️ OBRIGATÓRIO ao terminar
+//     consumirAcaoPendente('criarCampanha'); // OBRIGATÓRIO ao terminar
 //     // com sucesso — sem isto, se a pessoa já estava logada (ação
 //     // rodou direto, sem precisar de redirect) mas você chamou
 //     // guardarAcaoPendente() antes de exigirLogin() por precaução,

@@ -755,6 +755,12 @@ function mostrarVazio(msg) {
 // usa delimitador de aspas simples com dado do usuário interpolado (todos
 // usam "..."), mas se algum trecho futuro vier a usar '...', esc() já cobre.
 function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+function iconeDaFicha(nome, padrao = 'auto_awesome') {
+  const icone = /^[a-z][a-z0-9_]*$/.test(nome || '') ? nome : padrao;
+  return `<span class="ui-icon" data-icon="${icone}" aria-hidden="true"></span>`;
+}
+
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
 function getAtrib(id) {
@@ -1258,8 +1264,7 @@ function montarOpcoesSelect(objeto, valorSelecionado, chavesPermitidas) {
     .map(chave => {
       const item = objeto[chave];
       const sel = chave === valorSelecionado ? 'selected' : '';
-      const icone = item.icone ? `${item.icone} ` : '';
-      return `<option value="${esc(chave)}" ${sel}>${icone}${esc(item.nome)}</option>`;
+      return `<option value="${esc(chave)}" ${sel}>${esc(item.nome)}</option>`;
     })
     .join('');
 }
@@ -1295,11 +1300,11 @@ function gerarBlocoCustoVital(magia, mod) {
     if (mod.custoVital.sanidade) partesLegado.push(`${mod.custoVital.sanidade} Sanidade`);
   }
   const blocoLegado = partesLegado.length
-    ? `<div class="magia-custo-vital">🩸 Custo Vital: ${esc(partesLegado.join(' + '))}</div>`
+    ? `<div class="magia-custo-vital">${iconeDaFicha('water_drop')} Custo Vital: ${esc(partesLegado.join(' + '))}</div>`
     : '';
 
   const blocoSacrificio = magia.sacrificioAtivo
-    ? `<div class="magia-custo-vital">🩸 Sacrifício Vital: faltou recurso arcano — −${magia.custoPV} PV do conjurador para cobrir a diferença</div>`
+    ? `<div class="magia-custo-vital">${iconeDaFicha('water_drop')} Sacrifício Vital: faltou recurso arcano — −${magia.custoPV} PV do conjurador para cobrir a diferença</div>`
     : '';
 
   return blocoSacrificio + blocoLegado;
@@ -1314,7 +1319,7 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
     return `<div class="magia-card-vazio">Selecione um Aspecto, Verbo e Modificador para conjurar o preview.</div>`;
   }
   if (magia.erro) {
-    return `<div class="magia-card-vazio magia-card-erro">⚠️ ${esc(magia.erro)}</div>`;
+    return `<div class="magia-card-vazio magia-card-erro">${iconeDaFicha('warning')} ${esc(magia.erro)}</div>`;
   }
 
   const intensidade = magia.intensidadeNarrativa || 1; // círculo 1–10
@@ -1325,8 +1330,12 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
   const cor = magia.corHex || '#C9A84C';
 
   // ── V4.0: Badge de Intenção do Verbo ──────────────────────────
-  const INTENCAO_LABEL = { ofensivo: '⚔️ Ofensivo', defensivo: '🛡️ Defensivo', utilidade: '🔮 Utilidade' };
-  const intencaoLabel = INTENCAO_LABEL[magia.intencaoVerbo] || '';
+  const intencoes = {
+    ofensivo: { rotulo: 'Ofensivo', icone: 'swords' },
+    defensivo: { rotulo: 'Defensivo', icone: 'shield' },
+    utilidade: { rotulo: 'Utilidade', icone: 'auto_awesome' }
+  };
+  const intencao = intencoes[magia.intencaoVerbo];
 
   // ── Tags da Camada 4 (gerarMagiaSegura): já vêm prontas como Array ──────
   // Inclui: dano, custo, ricochete, PV estrutural, infusão, falha crítica etc.
@@ -1339,12 +1348,12 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
 
   // Badges de Alcance / Área / Duração / Visibilidade / Recurso (mantidos do legado)
   const badgesLegado = [
-    intencaoLabel ? `<span class="magia-badge magia-badge-intencao">${esc(intencaoLabel)}</span>` : '',
-    `<span class="magia-badge">📏 ${esc(magia.alcance)}</span>`,
-    `<span class="magia-badge">🎯 ${esc(magia.area)}</span>`,
-    magia.duracaoEscala ? `<span class="magia-badge">⏳ ${esc(magia.duracaoEscala)}</span>` : '',
-    `<span class="magia-badge">👁 ${esc(magia.visibilidade)}</span>`,
-    `<span class="magia-badge ${classeRecurso(magia.recurso)}">${magia.recurso === 'macula' ? '🩸' : '✦'} ${magia.custoFinal} ${magia.recurso === 'macula' ? 'Mácula' : 'Sopro'}</span>`,
+    intencao ? `<span class="magia-badge magia-badge-intencao">${iconeDaFicha(intencao.icone)} ${esc(intencao.rotulo)}</span>` : '',
+    `<span class="magia-badge">${iconeDaFicha('straighten')} ${esc(magia.alcance)}</span>`,
+    `<span class="magia-badge">${iconeDaFicha('target')} ${esc(magia.area)}</span>`,
+    magia.duracaoEscala ? `<span class="magia-badge">${iconeDaFicha('hourglass_empty')} ${esc(magia.duracaoEscala)}</span>` : '',
+    `<span class="magia-badge">${iconeDaFicha('visibility')} ${esc(magia.visibilidade)}</span>`,
+    `<span class="magia-badge ${classeRecurso(magia.recurso)}">${iconeDaFicha(magia.recurso === 'macula' ? 'water_drop' : 'auto_awesome')} ${magia.custoFinal} ${magia.recurso === 'macula' ? 'Mácula' : 'Sopro'}</span>`,
   ].filter(Boolean).join('');
 
   // ── V4.0: Blocos especiais dos novos modificadores ─────────────
@@ -1353,12 +1362,12 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
   // ── Bloco mecânico unificado (Camada 4) ───────────────────────
   // Reúne: dado resolvido, manifestação e eco num único resumo inline.
   // Ícone e label do dado variam por tipoRolagem:
-  //   'dano'   → 🎲 (verbos ofensivos)
-  //   'pvtemp' → 🛡️ PV Temp (Proteger)
+  //   'dano'   → dado (verbos ofensivos)
+  //   'pvtemp' → PV Temp (Proteger)
   //   null     → sem dado (sem bloco)
   const spanDado = (magia.dadoResolvido && magia.quantidadeDados && magia.tipoRolagem)
     ? (() => {
-        const icone  = magia.tipoRolagem === 'pvtemp' ? '🛡️' : '🎲';
+        const icone = iconeDaFicha(magia.tipoRolagem === 'pvtemp' ? 'shield' : 'casino');
         const prefixo = magia.tipoRolagem === 'pvtemp' ? 'PV Temp' : '';
         const formula = `${magia.quantidadeDados}${esc(magia.dadoResolvido)}`;
         const bonus   = magia.bonusFixoDado ? ` +${magia.bonusFixoDado}` : '';
@@ -1369,13 +1378,13 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
       })()
     : '';
   const spanManifest = magia.manifestacao
-    ? `<span>🔷 ${esc(magia.manifestacao)}${magia.subgrupoManifestacao ? ` (${esc(magia.subgrupoManifestacao)})` : ''}${magia.limiteRicochete != null ? ` · Ricochete máx. ${magia.limiteRicochete}` : ''}</span>`
+    ? `<span>${iconeDaFicha('diamond')} ${esc(magia.manifestacao)}${magia.subgrupoManifestacao ? ` (${esc(magia.subgrupoManifestacao)})` : ''}${magia.limiteRicochete != null ? ` · Ricochete máx. ${magia.limiteRicochete}` : ''}</span>`
     : '';
   const spanEco = (modSelecionado && modSelecionado.nome === 'Eco Persistente')
-    ? `<span>🔁 Eco: Círculo ${Math.max(1, Math.floor((magia.circulo || 1) / 2))}</span>`
+    ? `<span>${iconeDaFicha('repeat')} Eco: Círculo ${Math.max(1, Math.floor((magia.circulo || 1) / 2))}</span>`
     : '';
   const spanDobraEspacial = (modSelecionado && modSelecionado.nome === 'Dobra Espacial')
-    ? `<span>🌀 Véu atravessado</span>`
+    ? `<span>${iconeDaFicha('auto_awesome')} Véu atravessado</span>`
     : '';
   const spansMecanica = [spanDado, spanManifest, spanEco, spanDobraEspacial].filter(Boolean);
   const blocoMecanica = spansMecanica.length
@@ -1385,14 +1394,14 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
   // ── Camada 4: Falha Crítica ────────────────────────────────────
   const blocoFalhaCritica = (magia.falhaCritica && magia.falhaCritica.descricao) ? `
     <div class="magia-custo-vital" style="background:rgba(80,10,10,0.30);border-color:rgba(180,40,40,0.50)">
-      💀 <strong>Falha Crítica (${esc(magia.falhaCritica.tag)}):</strong>
+      ${iconeDaFicha('skull')} <strong>Falha Crítica (${esc(magia.falhaCritica.tag)}):</strong>
       ${esc(magia.falhaCritica.descricao)}
     </div>` : '';
 
   // Gaveta de sequela: só aparece se houver sequela (Leve/Moderada/Severa).
   const blocoSequela = (magia.sequela && magia.sequela !== 'Nenhuma') ? `
     <div class="magia-sequela">
-      <div class="magia-sequela-titulo">⚠️ Sequela ${esc(magia.sequela)}</div>
+      <div class="magia-sequela-titulo">${iconeDaFicha('warning')} Sequela ${esc(magia.sequela)}</div>
       <div class="magia-sequela-texto">${esc(magia.textoSequela)}</div>
     </div>` : '';
 
@@ -1408,17 +1417,17 @@ function gerarHTMLCardMagia(magia, modSelecionado) {
   // isto é só uma rede de segurança.
   const blocoSinergia = (magia.sinergia && !magia.sinergia.erro) ? `
     <div class="magia-custo-vital" style="background:rgba(90,50,10,0.30);border-color:rgba(200,140,40,0.50)">
-      ${magia.sinergia.direcao === 'corromper' ? '🩸' : '✨'}
+      ${iconeDaFicha(magia.sinergia.direcao === 'corromper' ? 'water_drop' : 'auto_awesome')}
       <strong>${magia.sinergia.direcao === 'corromper' ? 'Corrompida' : 'Purificada'} (${esc(magia.sinergia.grau)}):</strong>
       ${magia.sinergia.custoMigrado} ${magia.sinergia.recursoDestino === 'macula' ? 'Mácula' : 'Sopro'} migrado(s) de ${magia.sinergia.custoTotal} total.
-      <div style="margin-top:6px;font-style:italic">🎲 Selvageria (1d10 = ${magia.sinergia.rolagemSelvageria}, prévia — rola de novo a cada ajuste): ${esc(magia.sinergia.textoSelvageria)}</div>
+      <div style="margin-top:6px;font-style:italic">${iconeDaFicha('casino')} Selvageria (1d10 = ${magia.sinergia.rolagemSelvageria}, prévia — rola de novo a cada ajuste): ${esc(magia.sinergia.textoSelvageria)}</div>
       ${magia.sinergia.efeitoSelvageria ? `<div style="margin-top:4px"><strong>Efeito:</strong> ${esc(magia.sinergia.efeitoSelvageria)}</div>` : ''}
     </div>` : '';
 
   return `
     <div class="magia-card ${classeIntensidade}" style="--cor-aspecto:${cor}">
       <div class="magia-card-header">
-        <div class="magia-icone">${magia.icone || '✦'}</div>
+        <div class="magia-icone">${iconeDaFicha(magia.icone)}</div>
         <div>
           <div class="magia-titulo">${esc(magia.nomeVerbo)} · ${esc(magia.nomeAspecto)}</div>
           <div class="magia-subtitulo">${esc(magia.divindade)} — ${esc(magia.nomeModificador)} · Círculo ${magia.circulo}</div>
@@ -1753,7 +1762,7 @@ function gerarBlocoAprenderAspecto() {
   const listaConhecidos = (d.grimorio.aspectosLivres || [])
     .map(id => {
       const asp = sistemaMagia.aspectos[id];
-      return asp ? `<span class="grimorio-aspecto-chip">${asp.icone || ''} ${esc(asp.nome)} <button onclick="removerAspectoLivre('${id}')" title="Esquecer este aspecto">✕</button></span>` : '';
+      return asp ? `<span class="grimorio-aspecto-chip">${iconeDaFicha(asp.icone)} ${esc(asp.nome)} <button onclick="removerAspectoLivre('${id}')" title="Esquecer este aspecto">✕</button></span>` : '';
     }).join('');
 
   return `
@@ -1823,17 +1832,17 @@ function gerarBlocoAprender(combo) {
 
   const total = (PERSONAGEM.dados.grimorio.magiasSalvas || []).length;
   const limite = limiteMagiasConhecidas();
-  const contadorHTML = `<div class="grimorio-contador ${total >= limite ? 'no-limite' : ''}">📖 Magias conhecidas: ${total} / ${limite}</div>`;
+  const contadorHTML = `<div class="grimorio-contador ${total >= limite ? 'no-limite' : ''}">${iconeDaFicha('menu_book')} Magias conhecidas: ${total} / ${limite}</div>`;
 
   if (magiaJaAprendida(aspecto, mod, manifestacao)) {
     return `${contadorHTML}<div class="grimorio-aprender-aviso ja-aprendida">✓ Esta combinação de Aspecto+Modificador já foi aprendida. O Verbo é escolhido livremente na hora de conjurar, na aba Combate.</div>`;
   }
 
   if (total >= limite) {
-    return `${contadorHTML}<div class="grimorio-aprender-aviso no-limite">⚠️ Limite de magias conhecidas atingido. Remova uma magia da lista, ou suba de nível, para aprender outra.</div>`;
+    return `${contadorHTML}<div class="grimorio-aprender-aviso no-limite">${iconeDaFicha('warning')} Limite de magias conhecidas atingido. Remova uma magia da lista, ou suba de nível, para aprender outra.</div>`;
   }
 
-  return `${contadorHTML}<button class="btn-aprender-magia" onclick="aprenderMagiaAtual()">📖 Aprender esta Magia</button>`;
+  return `${contadorHTML}<button class="btn-aprender-magia" onclick="aprenderMagiaAtual()">${iconeDaFicha('menu_book')} Aprender esta Magia</button>`;
 }
 
 // Salva a combinação atual da Coluna 1 como uma nova magia conhecida.
@@ -2027,12 +2036,12 @@ function gerarHTMLListaMagiasSalvas(d) {
     return `
     <div class="magsalva-item" style="--cor-aspecto:${cor}">
       <div class="magsalva-linha">
-        <div class="magsalva-icone">${(aspecto && aspecto.icone) || '✦'}</div>
+        <div class="magsalva-icone">${iconeDaFicha(aspecto?.icone)}</div>
         <div class="magsalva-info" onclick="toggleDetalheMagiaSalva('${m.id}')">
           <div class="magsalva-titulo">${esc(nomeAspecto)} · ${esc(nomeMod)}</div>
           <div class="magsalva-subtitulo">${m.manifestacao ? esc((sistemaMagia.manifestacoes[m.manifestacao]||{}).nome || m.manifestacao) : 'Sem manifestação'}</div>
         </div>
-        <button class="magsalva-btn-rolar" title="Rolar dados desta magia (em breve)" disabled style="opacity:0.35;cursor:not-allowed;background:none;border:1px solid rgba(201,168,76,0.25);color:var(--gold);font-size:14px;padding:4px 8px;border-radius:4px">🎲</button>
+        <button class="magsalva-btn-rolar" title="Rolar dados desta magia (em breve)" disabled style="opacity:0.35;cursor:not-allowed;background:none;border:1px solid rgba(201,168,76,0.25);color:var(--gold);font-size:14px;padding:4px 8px;border-radius:4px">${iconeDaFicha('casino')}</button>
         <button class="magsalva-btn-remover" onclick="removerMagiaSalva('${m.id}')" title="Esquecer esta magia">✕</button>
       </div>
       <div class="magsalva-linha" style="margin-top:6px">
@@ -2693,7 +2702,7 @@ function mostrarIndicadorSalvo() {
 function mostrarIndicadorSomenteLeitura() {
   const el = document.getElementById('saveIndicator');
   if (!el) return;
-  el.textContent = '👁 Somente leitura';
+  el.textContent = 'Somente leitura';
   el.classList.add('show');
   clearTimeout(el._hideTimeout);
 }
@@ -2957,7 +2966,7 @@ document.head.appendChild(uploadStyle);
 
 window.addEventListener('beforeunload', () => { if (_saveTimeout) salvarAgora(); });
 
-init();
+document.addEventListener('DOMContentLoaded', init, { once: true });
 
 // Retorna um Set com todos os IDs de perícias que não podem ser desmarcadas
 // manualmente (concedidas por classe ou antecedente/origem).

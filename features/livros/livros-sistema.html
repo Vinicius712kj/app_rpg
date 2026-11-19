@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Livros — Forja das Eras</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../core/css/ui-icons.css">
 <link rel="stylesheet" href="livros-sistema.css">
 </head>
 <body>
@@ -44,7 +45,7 @@
     <div class="corner tl"></div><div class="corner tr"></div>
     <div class="corner bl"></div><div class="corner br"></div>
     <div class="modal-header">
-      <span class="modal-title">📖 ADICIONAR LIVRO</span>
+      <span class="modal-title"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> ADICIONAR LIVRO</span>
       <button class="modal-close" onclick="closeModal('modalNovoLivro')">×</button>
     </div>
     <div class="modal-body">
@@ -109,7 +110,7 @@ let TODOS_LIVROS = [];
 async function init() {
   sistemaAtual = getParamUrl('sys');
   if (!sistemaAtual || !SISTEMAS_LABEL[sistemaAtual]) {
-    document.getElementById('livrosContainer').innerHTML = `<div class="loading-msg">⚠ Sistema não especificado ou inválido.</div>`;
+    document.getElementById('livrosContainer').innerHTML = `<div class="loading-msg">Sistema não especificado ou inválido.</div>`;
     return;
   }
 
@@ -144,7 +145,7 @@ async function carregarLivros() {
   renderLivros();
 }
 
-const ROTULOS_TIPO = { basico: '📘 Livros Básicos', suplemento: '📙 Suplementos', campanha: '🗺 Livros de Campanha' };
+const ROTULOS_TIPO = { basico: 'Livros Básicos', suplemento: 'Suplementos', campanha: 'Livros de Campanha' };
 
 function renderLivros() {
   const termo = (document.getElementById('buscaLivrosInput').value || '').trim().toLowerCase();
@@ -173,7 +174,7 @@ function renderLivros() {
       <div class="livros-grid">
         ${doTipo.map((l, i) => `
           <div class="livro-card fade-in" style="animation-delay:${i*0.05}s" onclick="abrirLivro('${l.arquivo}')">
-            <div class="livro-titulo">📖 ${l.titulo}</div>
+            <div class="livro-titulo"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> ${l.titulo}</div>
             <div class="livro-meta">${l.paginas ? l.paginas + ' págs.' : ''}</div>
           </div>`).join('')}
       </div>
@@ -201,7 +202,7 @@ function confirmarNovoLivro() {
   const tipo = document.getElementById('nl_tipo').value;
   let arquivo = document.getElementById('nl_arquivo').value.trim();
 
-  if (!titulo || !arquivo) { showToast('⚠ Preencha o título e o nome do arquivo.', 'warning'); return; }
+  if (!titulo || !arquivo) { showToast('Preencha o título e o nome do arquivo.', 'warning'); return; }
   if (!arquivo.endsWith('.json')) arquivo += '.json';
 
   const entrada = { id: arquivo.replace('.json',''), titulo, tipo, arquivo: `${sistemaAtual}/${arquivo}`, paginas: null };
@@ -217,7 +218,7 @@ function confirmarNovoLivro() {
 
   closeModal('modalNovoLivro');
   renderLivros();
-  showToast(`📖 "${titulo}" adicionado!`, 'gold');
+  showToast(`"${titulo}" adicionado!`, 'gold');
 }
 
 // =============================================================

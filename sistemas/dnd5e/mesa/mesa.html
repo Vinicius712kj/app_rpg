@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forja das Eras — Sistema de RPG</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../core/css/ui-icons.css">
 <link rel="stylesheet" href="../styles/mesa.css">
 <header class="header">
   <div class="header-logo">
@@ -28,22 +29,22 @@
 <!-- NAVIGATION -->
 <nav class="nav-tabs">
   <button class="nav-tab active" onclick="switchTab('ficha')" data-tab="ficha">
-    <span class="tab-icon">⚔️</span> FICHA DO PERSONAGEM
+    <span class="tab-icon"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span></span> FICHA DO PERSONAGEM
   </button>
   <button class="nav-tab" onclick="switchTab('dados')" data-tab="dados">
-    <span class="tab-icon">🎲</span> DADOS & ROLAGENS
+    <span class="tab-icon"><span class="ui-icon" data-icon="casino" aria-hidden="true"></span></span> DADOS & ROLAGENS
   </button>
   <button class="nav-tab" onclick="switchTab('grimorio')" data-tab="grimorio">
-    <span class="tab-icon">📜</span> GRIMÓRIO
+    <span class="tab-icon"><span class="ui-icon" data-icon="description" aria-hidden="true"></span></span> GRIMÓRIO
   </button>
   <button class="nav-tab" onclick="switchTab('inventario')" data-tab="inventario">
-    <span class="tab-icon">⚗️</span> INVENTÁRIO
+    <span class="tab-icon"><span class="ui-icon" data-icon="backpack" aria-hidden="true"></span></span> INVENTÁRIO
   </button>
   <button class="nav-tab" onclick="switchTab('mestre')" data-tab="mestre">
-    <span class="tab-icon">🛡️</span> ESCUDO DO MESTRE
+    <span class="tab-icon"><span class="ui-icon" data-icon="shield" aria-hidden="true"></span></span> ESCUDO DO MESTRE
   </button>
   <button class="nav-tab" onclick="switchTab('notas')" data-tab="notas">
-    <span class="tab-icon">📖</span> CRÔNICAS
+    <span class="tab-icon"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span></span> CRÔNICAS
   </button>
 </nav>
 
@@ -129,7 +130,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">❤ Pontos Vitais</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="favorite" aria-hidden="true"></span> Pontos Vitais</span></div>
         <div class="panel-body" style="padding:14px">
           <div class="vitals-row">
             <div class="vital-block">
@@ -223,11 +224,11 @@
         <div class="panel-header"><span class="panel-title">⊛ Tesouraria</span></div>
         <div class="panel-body" style="padding:12px">
           <div class="money-row">
-            <div class="coin-block"><span class="coin-icon">🪙</span><span class="coin-label">P.C.</span><input class="coin-input" type="number" value="0" placeholder="0"></div>
-            <div class="coin-block"><span class="coin-icon">🥈</span><span class="coin-label">P.P.</span><input class="coin-input" type="number" value="15" placeholder="0"></div>
-            <div class="coin-block"><span class="coin-icon">⚙️</span><span class="coin-label">P.E.</span><input class="coin-input" type="number" value="0" placeholder="0"></div>
-            <div class="coin-block"><span class="coin-icon">💛</span><span class="coin-label">P.O.</span><input class="coin-input" type="number" value="230" placeholder="0"></div>
-            <div class="coin-block"><span class="coin-icon">💎</span><span class="coin-label">P.Pl.</span><input class="coin-input" type="number" value="2" placeholder="0"></div>
+            <div class="coin-block"><span class="coin-icon"><span class="ui-icon" data-icon="paid" aria-hidden="true"></span></span><span class="coin-label">P.C.</span><input class="coin-input" type="number" value="0" placeholder="0"></div>
+            <div class="coin-block"><span class="coin-icon"><span class="ui-icon" data-icon="paid" aria-hidden="true"></span></span><span class="coin-label">P.P.</span><input class="coin-input" type="number" value="15" placeholder="0"></div>
+            <div class="coin-block"><span class="coin-icon"><span class="ui-icon" data-icon="paid" aria-hidden="true"></span></span><span class="coin-label">P.E.</span><input class="coin-input" type="number" value="0" placeholder="0"></div>
+            <div class="coin-block"><span class="coin-icon"><span class="ui-icon" data-icon="paid" aria-hidden="true"></span></span><span class="coin-label">P.O.</span><input class="coin-input" type="number" value="230" placeholder="0"></div>
+            <div class="coin-block"><span class="coin-icon"><span class="ui-icon" data-icon="diamond" aria-hidden="true"></span></span><span class="coin-label">P.Pl.</span><input class="coin-input" type="number" value="2" placeholder="0"></div>
           </div>
         </div>
       </div>
@@ -305,7 +306,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">⚔ Ataques & Ações</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span> Ataques & Ações</span></div>
         <div class="panel-body">
           <table class="reference-table" style="margin-bottom:12px">
             <thead>
@@ -351,7 +352,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">🎲 Dados</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="casino" aria-hidden="true"></span> Dados</span></div>
         <div class="panel-body">
           <div class="dice-grid" id="diceGrid">
             <button class="dice-btn" onclick="rollDice(4,this)">
@@ -412,12 +413,12 @@
           </div>
 
           <div style="display:flex;flex-wrap:wrap;gap:8px">
-            <button class="btn btn-gold" onclick="rollCustom('Ataque','1d20','Bônus de Ataque')">⚔ Ataque</button>
-            <button class="btn btn-blood" onclick="rollCustom('Dano','2d6','Dano Médio')">💥 Dano 2d6</button>
+            <button class="btn btn-gold" onclick="rollCustom('Ataque','1d20','Bônus de Ataque')"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span> Ataque</button>
+            <button class="btn btn-blood" onclick="rollCustom('Dano','2d6','Dano Médio')"><span class="ui-icon" data-icon="explosion" aria-hidden="true"></span> Dano 2d6</button>
             <button class="btn btn-arcane" onclick="rollCustom('Magia','1d20','Dificuldade 15')">✦ Tiro de Magia</button>
-            <button class="btn btn-gold" onclick="rollCustom('Iniciativa','1d20','Destreza')">⚡ Iniciativa</button>
-            <button class="btn btn-blood" onclick="rollCustom('Percepção','1d20','Sabedoria')">👁 Percepção</button>
-            <button class="btn btn-arcane" onclick="rollCustom('Furtividade','1d20','Destreza')">🌑 Furtividade</button>
+            <button class="btn btn-gold" onclick="rollCustom('Iniciativa','1d20','Destreza')"><span class="ui-icon" data-icon="bolt" aria-hidden="true"></span> Iniciativa</button>
+            <button class="btn btn-blood" onclick="rollCustom('Percepção','1d20','Sabedoria')"><span class="ui-icon" data-icon="visibility" aria-hidden="true"></span> Percepção</button>
+            <button class="btn btn-arcane" onclick="rollCustom('Furtividade','1d20','Destreza')"><span class="ui-icon" data-icon="dark_mode" aria-hidden="true"></span> Furtividade</button>
           </div>
         </div>
       </div>
@@ -426,7 +427,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">📜 Histórico de Rolagens</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="description" aria-hidden="true"></span> Histórico de Rolagens</span></div>
         <div class="panel-body">
           <div class="roll-history" id="rollHistory">
             <div style="text-align:center;padding:40px;opacity:0.3;font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px">Os dados aguardam o destino...</div>
@@ -440,10 +441,10 @@
       <div class="panel" style="margin-bottom:20px">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">⚙ Gerador de Atributos</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="settings" aria-hidden="true"></span> Gerador de Atributos</span></div>
         <div class="panel-body">
           <div id="statRoller" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
-          <button class="btn btn-gold" style="width:100%;margin-bottom:8px" onclick="rollStats()">🎲 Rolar 4d6 (descartar menor)</button>
+          <button class="btn btn-gold" style="width:100%;margin-bottom:8px" onclick="rollStats()"><span class="ui-icon" data-icon="casino" aria-hidden="true"></span> Rolar 4d6 (descartar menor)</button>
           <button class="btn btn-arcane" style="width:100%" onclick="standardArray()">◈ Array Padrão</button>
         </div>
       </div>
@@ -451,7 +452,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">🧙 Tabela de Dificuldade</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="target" aria-hidden="true"></span> Tabela de Dificuldade</span></div>
         <div class="panel-body" style="padding:12px">
           <table class="reference-table">
             <thead><tr><th>Tarefa</th><th>CD</th></tr></thead>
@@ -511,7 +512,7 @@
       <div class="panel-corner"></div><div class="panel-corner tr"></div>
       <div class="panel-corner bl"></div><div class="panel-corner br"></div>
       <div class="panel-header">
-        <span class="panel-title">📜 Magias Conhecidas</span>
+        <span class="panel-title"><span class="ui-icon" data-icon="description" aria-hidden="true"></span> Magias Conhecidas</span>
         <input type="text" class="compact-input" placeholder="Buscar magia..." style="width:200px" oninput="filterSpellSearch(this.value)">
       </div>
       <div class="panel-body">
@@ -530,15 +531,15 @@
     <div class="panel">
       <div class="panel-corner"></div><div class="panel-corner tr"></div>
       <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-      <div class="panel-header"><span class="panel-title">🛡 Equipamentos</span></div>
+      <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="shield" aria-hidden="true"></span> Equipamentos</span></div>
       <div class="panel-body">
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
           <div style="display:flex;flex-direction:column;gap:8px">
-            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Cabeça">🪖</div>
-            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Ombros">🧣</div>
-            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Peito">🛡</div>
+            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Cabeça"><span class="ui-icon" data-icon="shield" aria-hidden="true"></span></div>
+            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Ombros"><span class="ui-icon" data-icon="checkroom" aria-hidden="true"></span></div>
+            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Peito"><span class="ui-icon" data-icon="shield" aria-hidden="true"></span></div>
             <div class="inv-slot" style="height:60px;aspect-ratio:unset;border-style:dashed" title="Cinto"></div>
-            <div class="inv-slot" style="height:60px;aspect-ratio:unset;border-style:dashed" title="Botas">🥾</div>
+            <div class="inv-slot" style="height:60px;aspect-ratio:unset;border-style:dashed" title="Botas"><span class="ui-icon" data-icon="hiking" aria-hidden="true"></span></div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:center;justify-content:center">
             <svg width="120" height="220" viewBox="0 0 120 220" fill="none" xmlns="http://www.w3.org/2000/svg" opacity="0.25">
@@ -552,10 +553,10 @@
             </svg>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <div class="inv-slot equipped" style="height:60px;aspect-ratio:unset" title="Mão Direita">⚔️</div>
-            <div class="inv-slot equipped" style="height:60px;aspect-ratio:unset" title="Mão Esquerda">🛡</div>
-            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Anel">💍</div>
-            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Amuleto">📿</div>
+            <div class="inv-slot equipped" style="height:60px;aspect-ratio:unset" title="Mão Direita"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span></div>
+            <div class="inv-slot equipped" style="height:60px;aspect-ratio:unset" title="Mão Esquerda"><span class="ui-icon" data-icon="shield" aria-hidden="true"></span></div>
+            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Anel"><span class="ui-icon" data-icon="diamond" aria-hidden="true"></span></div>
+            <div class="inv-slot" style="height:60px;aspect-ratio:unset" title="Amuleto"><span class="ui-icon" data-icon="diamond" aria-hidden="true"></span></div>
             <div class="inv-slot" style="height:60px;aspect-ratio:unset;border-style:dashed" title="Luvas"></div>
           </div>
         </div>
@@ -576,7 +577,7 @@
       <div class="panel-corner"></div><div class="panel-corner tr"></div>
       <div class="panel-corner bl"></div><div class="panel-corner br"></div>
       <div class="panel-header">
-        <span class="panel-title">⚗ Mochila & Itens</span>
+        <span class="panel-title"><span class="ui-icon" data-icon="backpack" aria-hidden="true"></span> Mochila & Itens</span>
         <button class="btn btn-gold" style="font-size:11px;padding:6px 14px;letter-spacing:1px" onclick="addItemPrompt()">+ Adicionar</button>
       </div>
       <div class="panel-body" style="padding:8px 0">
@@ -598,7 +599,7 @@
       <div style="font-family:'EB Garamond',serif;font-size:13px;color:var(--parchment-dark);opacity:0.7;margin-top:2px">Área restrita — visível apenas ao Mestre da Masmorra</div>
     </div>
     <div style="margin-left:auto">
-      <button class="music-btn" onclick="toggleMasterView(this)">👁 Ocultar do Jogador</button>
+      <button class="music-btn" onclick="toggleMasterView(this)"><span class="ui-icon" data-icon="visibility" aria-hidden="true"></span> Ocultar do Jogador</button>
     </div>
   </div>
 
@@ -608,14 +609,14 @@
     <div class="panel">
       <div class="panel-corner"></div><div class="panel-corner tr"></div>
       <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-      <div class="panel-header"><span class="panel-title">⚡ Ordem de Iniciativa</span></div>
+      <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="bolt" aria-hidden="true"></span> Ordem de Iniciativa</span></div>
       <div class="panel-body">
         <div class="turn-controls">
           <div class="round-display">
             <span class="round-label">RODADA</span>
             <span id="roundNum">1</span>
           </div>
-          <button class="next-turn-btn" onclick="nextTurn()">Próximo Turno ▶</button>
+          <button class="next-turn-btn" onclick="nextTurn()">Próximo Turno →</button>
         </div>
         <div class="initiative-list" id="initiativeList"></div>
         <div style="margin-top:12px;display:flex;gap:8px">
@@ -636,7 +637,7 @@
       <div class="panel-corner"></div><div class="panel-corner tr"></div>
       <div class="panel-corner bl"></div><div class="panel-corner br"></div>
       <div class="panel-header">
-        <span class="panel-title">🗡 NPCs & Inimigos</span>
+        <span class="panel-title"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span> NPCs & Inimigos</span>
         <button class="btn btn-blood" style="font-size:11px;padding:5px 12px" onclick="addNpc()">+ NPC</button>
       </div>
       <div class="panel-body" style="max-height:500px;overflow-y:auto" id="npcList"></div>
@@ -649,7 +650,7 @@
       <div class="panel" style="margin-bottom:20px">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">📋 Condições de Referência</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="checklist" aria-hidden="true"></span> Condições de Referência</span></div>
         <div class="panel-body" style="padding:12px">
           <table class="reference-table" style="font-size:12px">
             <thead><tr><th>Condição</th><th>Efeito Principal</th></tr></thead>
@@ -671,7 +672,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">🔒 Notas Secretas do Mestre</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="lock" aria-hidden="true"></span> Notas Secretas do Mestre</span></div>
         <div class="panel-body">
           <textarea class="parchment-textarea" style="min-height:200px" placeholder="Segredos da campanha, gatilhos de plot, informações ocultas que os jogadores não devem ver...&#10;&#10;• O velho estalajadeiro é um espião do Rei das Sombras&#10;• A masmorra tem uma passagem secreta atrás da fonte..."></textarea>
         </div>
@@ -692,13 +693,13 @@
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
         <div class="panel-header">
-          <span class="panel-title">📖 Diário de Aventuras</span>
+          <span class="panel-title"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> Diário de Aventuras</span>
           <input class="compact-input" id="sessionTitle" placeholder="Título da sessão..." style="width:220px">
         </div>
         <div class="panel-body">
           <textarea class="parchment-textarea" style="min-height:300px" placeholder="Narre os eventos desta sessão como uma crônica épica...&#10;&#10;'Era o décimo terceiro dia do mês das colheitas quando o grupo de aventureiros chegou à cidade de Faermouth, com o coração pesado pelo que presenciaram nas ruínas de Ashenvale...'"></textarea>
           <div style="display:flex;gap:8px;margin-top:12px">
-            <button class="btn btn-gold">💾 Salvar Sessão</button>
+            <button class="btn btn-gold"><span class="ui-icon" data-icon="save" aria-hidden="true"></span> Salvar Sessão</button>
             <button class="btn btn-arcane">+ Nova Entrada</button>
           </div>
         </div>
@@ -707,9 +708,9 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">🗺 Mapa & Localizações</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="map" aria-hidden="true"></span> Mapa & Localizações</span></div>
         <div class="panel-body">
-          <textarea class="parchment-textarea" style="min-height:180px" placeholder="Registre locais descobertos, masmorras mapeadas, cidades visitadas...&#10;&#10;📍 Faermouth — cidade portuária, aliada&#10;🏰 Castelo Ravenmoor — inimigo, cuidado!&#10;⛏️ Mina Abandonada — dungeon parcialmente explorada..."></textarea>
+          <textarea class="parchment-textarea" style="min-height:180px" placeholder="Registre locais descobertos, masmorras mapeadas, cidades visitadas...&#10;&#10;Faermouth — cidade portuária, aliada&#10;Castelo Ravenmoor — inimigo, cuidado!&#10;Mina Abandonada — dungeon parcialmente explorada..."></textarea>
         </div>
       </div>
 
@@ -721,7 +722,7 @@
       <div class="panel">
         <div class="panel-corner"></div><div class="panel-corner tr"></div>
         <div class="panel-corner bl"></div><div class="panel-corner br"></div>
-        <div class="panel-header"><span class="panel-title">👥 Personagens Conhecidos</span></div>
+        <div class="panel-header"><span class="panel-title"><span class="ui-icon" data-icon="group" aria-hidden="true"></span> Personagens Conhecidos</span></div>
         <div class="panel-body" style="padding:12px">
           <div id="npcKnown" style="display:flex;flex-direction:column;gap:6px"></div>
           <div class="input-row" style="margin-top:10px">
@@ -806,16 +807,16 @@ const SPELLS = [
 ];
 
 const ITEMS = [
-  { name:'Espada Longa +2', icon:'⚔️', quality:'rare', qty:1 },
-  { name:'Armadura de Placas', icon:'🛡', quality:'uncommon', qty:1 },
-  { name:'Poção de Cura Suprema', icon:'🧪', quality:'rare', qty:3 },
-  { name:'Corda de Seda (15m)', icon:'🪢', quality:'common', qty:1 },
-  { name:'Tochas', icon:'🔥', quality:'common', qty:10 },
-  { name:'Anel de Proteção', icon:'💍', quality:'rare', qty:1 },
-  { name:'Pergaminho de Bola de Fogo', icon:'📜', quality:'uncommon', qty:2 },
-  { name:'Amuleto de Saúde', icon:'📿', quality:'uncommon', qty:1 },
-  { name:'Kit de Ladrão', icon:'🔑', quality:'common', qty:1 },
-  { name:'Pedra de Missiva', icon:'🔮', quality:'legendary', qty:1 }
+  { name:'Espada Longa +2', icon:'swords', quality:'rare', qty:1 },
+  { name:'Armadura de Placas', icon:'shield', quality:'uncommon', qty:1 },
+  { name:'Poção de Cura Suprema', icon:'science', quality:'rare', qty:3 },
+  { name:'Corda de Seda (15m)', icon:'link', quality:'common', qty:1 },
+  { name:'Tochas', icon:'local_fire_department', quality:'common', qty:10 },
+  { name:'Anel de Proteção', icon:'diamond', quality:'rare', qty:1 },
+  { name:'Pergaminho de Bola de Fogo', icon:'description', quality:'uncommon', qty:2 },
+  { name:'Amuleto de Saúde', icon:'diamond', quality:'uncommon', qty:1 },
+  { name:'Kit de Ladrão', icon:'key', quality:'common', qty:1 },
+  { name:'Pedra de Missiva', icon:'auto_awesome', quality:'legendary', qty:1 }
 ];
 
 const NPCS_GM = [
@@ -976,7 +977,7 @@ function rollDice(sides, btn) {
   const isFumble = sides === 20 && finalRolls.includes(1) && qty === 1 && !adv;
 
   addRollEntry(label, finalRolls, total, sides, isCrit, isFumble, mod);
-  showToast(isCrit ? `💫 CRÍTICO! ${total}` : isFumble ? `☠️ Falha Crítica!` : null, isCrit ? 'critical' : 'fumble', isCrit || isFumble);
+  showToast(isCrit ? `CRÍTICO! ${total}` : isFumble ? `Falha Crítica!` : null, isCrit ? 'critical' : 'fumble', isCrit || isFumble);
 }
 
 function rollCustom(name, diceStr, context) {
@@ -1008,7 +1009,7 @@ function renderRollHistory() {
     const cls = r.isCrit ? 'critical' : r.isFumble ? 'fumble' : 'normal';
     const modStr = r.mod !== 0 ? ` <span style="opacity:0.5;font-size:13px">${r.mod > 0 ? '+' : ''}${r.mod} mod</span>` : '';
     const diceHtml = r.rolls.map(d => `<span class="single-die ${d === r.sides ? 'max' : d === 1 ? 'min' : ''}">${d}</span>`).join('');
-    const label = r.isCrit ? '⭐ CRÍTICO' : r.isFumble ? '☠ FALHA' : '';
+    const label = r.isCrit ? 'CRÍTICO' : r.isFumble ? 'FALHA' : '';
     return `<div class="roll-entry ${cls}">
       <span class="roll-die-label">${r.label}</span>
       <div class="roll-dice-display">${diceHtml}${modStr}</div>
@@ -1112,9 +1113,9 @@ function renderSpells() {
         <span style="font-family:'Cinzel',serif;font-size:10px;color:var(--arcane-glow);opacity:0.5;border:1px solid rgba(74,106,175,0.2);padding:2px 8px">${s.school}</span>
       </div>
       <div class="spell-meta">
-        <span>⏱ ${s.cast}</span>
+        <span>Execução: ${s.cast}</span>
         <span>◎ ${s.range}</span>
-        <span>⏳ ${s.duration}</span>
+        <span>Duração: ${s.duration}</span>
       </div>
       <div class="spell-desc">${s.desc}</div>
     </div>`).join('')
@@ -1129,7 +1130,7 @@ function renderItems() {
   const list = document.getElementById('itemList');
   list.innerHTML = ITEMS.map((item, i) => `
     <div class="item-row" onclick="itemClick(${i})">
-      <span class="item-icon">${item.icon}</span>
+      <span class="item-icon"><span class="ui-icon" data-icon="${item.icon}" aria-hidden="true"></span></span>
       <span class="item-name-col">${item.name}</span>
       <span class="item-quality quality-${item.quality}">${item.quality.toUpperCase()}</span>
       <span class="item-qty">×${item.qty}</span>
@@ -1137,7 +1138,7 @@ function renderItems() {
 }
 
 function itemClick(i) {
-  showToast(`📦 ${ITEMS[i].name} — ${ITEMS[i].quality}`);
+  showToast(`${ITEMS[i].name} — ${ITEMS[i].quality}`);
 }
 
 function addItemPrompt() {
@@ -1179,7 +1180,7 @@ function nextTurn() {
   if (currentTurn === 0) round++;
   renderInitiative();
   const cur = initiatives[currentTurn];
-  showToast(`⚡ Turno de ${cur.name}`);
+  showToast(`Turno de ${cur.name}`);
 }
 
 function setActiveTurn(i) { currentTurn = i; renderInitiative(); }
@@ -1211,7 +1212,7 @@ function renderNpcs() {
           <button class="npc-hp-btn" onclick="changeNpcHp(${i}, 5)">+</button>
         </div>
       </div>
-      <div class="npc-info" style="margin-top:6px;font-style:italic;opacity:0.7">💬 ${npc.notes}</div>
+      <div class="npc-info" style="margin-top:6px;font-style:italic;opacity:0.7">${npc.notes}</div>
     </div>`).join('');
 }
 
@@ -1220,7 +1221,7 @@ function changeNpcHp(i, delta) {
   const pct = (NPCS_GM[i].hp / NPCS_GM[i].maxHp) * 100;
   document.getElementById(`npcHpBar_${i}`).style.width = pct + '%';
   document.getElementById(`npcHpText_${i}`).textContent = `${NPCS_GM[i].hp}/${NPCS_GM[i].maxHp}`;
-  if (NPCS_GM[i].hp === 0) showToast(`☠️ ${NPCS_GM[i].name} foi derrotado!`);
+  if (NPCS_GM[i].hp === 0) showToast(`${NPCS_GM[i].name} foi derrotado!`);
 }
 
 function addNpc() {
@@ -1310,11 +1311,11 @@ function showToast(msg, type, show = true) {
 // ======== MISC ========
 function toggleAtmosphere(btn) {
   btn.textContent = btn.textContent.includes('Silêncio') ? '♪ Atmosfera' : '⊘ Silêncio';
-  showToast('🎵 Atmosfera de taverna ativada');
+  showToast('Atmosfera de taverna ativada');
 }
 
 function toggleMasterView(btn) {
-  btn.textContent = btn.textContent.includes('Ocultar') ? '👁 Mostrar ao Jogador' : '👁 Ocultar do Jogador';
+  btn.textContent = btn.textContent.includes('Ocultar') ? 'Mostrar ao Jogador' : 'Ocultar do Jogador';
 }
 
 // ======== START ========

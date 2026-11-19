@@ -124,7 +124,7 @@ const sistemaCombateDesarmado = {
   // Cada Via define:
   //   nome        → nome de exibição
   //   filosofia   → subtítulo temático
-  //   icone       → emoji representativo
+  //   icone       → ícone representativo
   //   dadoBase    → dado de dano/efeito fundamental
   //   alcance     → alcance natural da Via
   //   impulsoFavorecido / impulsoPenalizado → fricção Via×Impulso
@@ -145,7 +145,7 @@ const sistemaCombateDesarmado = {
     punhoVivo: {
       nome: 'Via do Punho Vivo',
       filosofia: 'Força Bruta',
-      icone: '👊',
+      icone: 'sports_martial_arts',
       dadoBase: 'd10',        // índice 3 na escadaDados — o maior do sistema desarmado
       alcance: 'toque',
       impulsoFavorecido: 'romper',
@@ -204,7 +204,7 @@ const sistemaCombateDesarmado = {
     laminaCurta: {
       nome: 'Via da Lâmina Curta',
       filosofia: 'Precisão Cirúrgica',
-      icone: '🗡️',
+      icone: 'swords',
       dadoBase: 'd6',         // índice 1 — baixo dano, alto efeito colateral
       alcance: 'toque',
       impulsoFavorecido: 'romper',
@@ -264,7 +264,7 @@ const sistemaCombateDesarmado = {
     eco: {
       nome: 'Via do Eco',
       filosofia: 'Contra-ataque e Leitura',
-      icone: '🪞',
+      icone: 'visibility',
       dadoBase: 'd8',         // índice 2 — equilibrado
       alcance: 'toque',
       impulsoFavorecido: 'desviar',
@@ -324,7 +324,7 @@ const sistemaCombateDesarmado = {
     ventoSolto: {
       nome: 'Via do Vento Solto',
       filosofia: 'Mobilidade e Velocidade',
-      icone: '💨',
+      icone: 'air',
       dadoBase: 'd6',         // índice 1 — velocidade sobre potência
       alcance: 'curto',       // único com alcance além de toque — mobilidade dá range
       impulsoFavorecido: 'deslocar',
@@ -383,7 +383,7 @@ const sistemaCombateDesarmado = {
     corrente: {
       nome: 'Via da Corrente',
       filosofia: 'Agarrões e Imobilização',
-      icone: '⛓️',
+      icone: 'link',
       dadoBase: 'd8',         // índice 2 — equilibrado
       alcance: 'toque',
       impulsoFavorecido: 'prender',
@@ -443,7 +443,7 @@ const sistemaCombateDesarmado = {
     pedraFirme: {
       nome: 'Via da Pedra Firme',
       filosofia: 'Equilíbrio e Disciplina',
-      icone: '🪨',
+      icone: 'landscape',
       dadoBase: 'd8',         // índice 2 — equilibrado
       alcance: 'toque',
       impulsoFavorecido: 'desviar',

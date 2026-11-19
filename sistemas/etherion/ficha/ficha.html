@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ficha de Personagem — Etherion</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../core/css/ui-icons.css">
 <link rel="stylesheet" href="../styles/ficha.css">
 </head>
 <body>
@@ -20,14 +21,14 @@
 
 <!-- ===== TABS ===== -->
 <nav class="sheet-tabs">
-  <button class="sheet-tab active" data-tab="principal"  onclick="switchTab('principal')">✦ Principal</button>
-  <button class="sheet-tab" data-tab="pericias"   onclick="switchTab('pericias')">◈ Perícias</button>
-  <button class="sheet-tab" data-tab="grimorio"   onclick="switchTab('grimorio')">📕 Grimório Arcano</button>
-  <button class="sheet-tab" data-tab="arsenal"    onclick="switchTab('arsenal')">🥋 Arsenal</button>
-  <button class="sheet-tab" data-tab="combate"    onclick="switchTab('combate')">⚔ Combate</button>
-  <button class="sheet-tab" data-tab="inventario" onclick="switchTab('inventario')">⚜ Inventário</button>
-  <button class="sheet-tab" data-tab="biografia"  onclick="switchTab('biografia')">📖 Biografia</button>
-  <button class="sheet-tab" data-tab="notas"      onclick="switchTab('notas')">📜 Notas</button>
+  <button class="sheet-tab active" data-tab="principal"  onclick="switchTab('principal')"><span class="ui-icon" data-icon="person" aria-hidden="true"></span> Principal</button>
+  <button class="sheet-tab" data-tab="pericias"   onclick="switchTab('pericias')"><span class="ui-icon" data-icon="target" aria-hidden="true"></span> Perícias</button>
+  <button class="sheet-tab" data-tab="grimorio"   onclick="switchTab('grimorio')"><span class="ui-icon" data-icon="auto_stories" aria-hidden="true"></span> Grimório Arcano</button>
+  <button class="sheet-tab" data-tab="arsenal"    onclick="switchTab('arsenal')"><span class="ui-icon" data-icon="swords" aria-hidden="true"></span> Arsenal</button>
+  <button class="sheet-tab" data-tab="combate"    onclick="switchTab('combate')"><span class="ui-icon" data-icon="explosion" aria-hidden="true"></span> Combate</button>
+  <button class="sheet-tab" data-tab="inventario" onclick="switchTab('inventario')"><span class="ui-icon" data-icon="backpack" aria-hidden="true"></span> Inventário</button>
+  <button class="sheet-tab" data-tab="biografia"  onclick="switchTab('biografia')"><span class="ui-icon" data-icon="menu_book" aria-hidden="true"></span> Biografia</button>
+  <button class="sheet-tab" data-tab="notas"      onclick="switchTab('notas')"><span class="ui-icon" data-icon="description" aria-hidden="true"></span> Notas</button>
 </nav>
 
 <div class="sheet-wrap" id="sheetContent"></div>
